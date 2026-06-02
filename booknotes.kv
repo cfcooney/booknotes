@@ -1,5 +1,6 @@
 #:kivy 2.3.1
 #:include theme.kv
+#:import NoTransition kivy.uix.screenmanager.NoTransition
 
 <BookCard>:
     orientation: "horizontal"
@@ -31,30 +32,6 @@
             halign: "left"
             valign: "middle"
             text_size: self.size
-
-<AddBookPopup>:
-    title: "Add Book"
-    size_hint: 0.5, None
-    height: "280dp"
-    BoxLayout:
-        orientation: "vertical"
-        spacing: "12dp"
-        padding: "16dp"
-        TextInput:
-            id: title_input
-            hint_text: "Title"
-            size_hint_y: None
-            height: "44dp"
-            multiline: False
-        TextInput:
-            id: author_input
-            hint_text: "Author"
-            size_hint_y: None
-            height: "44dp"
-            multiline: False
-        PrimaryButton:
-            text: "Save"
-            on_release: root.save()
 
 <HomeScreen>:
     canvas.before:
@@ -102,10 +79,349 @@
             background_color: 0, 0, 0, 0
             background_normal: ""
             background_down: ""
-            on_release: root.open_add_book_popup()
+            on_release: root.go_to_add_book()
             canvas.before:
                 Color:
                     rgba: (0.45, 0.20, 0.05, 1) if self.state == 'down' else (0.55, 0.27, 0.07, 1)
                 Ellipse:
                     size: self.size
                     pos: self.pos
+
+<AddBookScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.96, 0.94, 0.91, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: "vertical"
+
+        # ── Header ────────────────────────────────────────────────────────────
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: "52dp"
+            padding: "8dp"
+            spacing: "4dp"
+            canvas.before:
+                Color:
+                    rgba: 0.55, 0.27, 0.07, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            Button:
+                text: "←"
+                size_hint: None, None
+                size: "44dp", "36dp"
+                font_size: "20sp"
+                color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                background_normal: ""
+                background_down: ""
+                on_release: root.go_back()
+            ScreenTitle:
+                text: "Add Book"
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+            Widget:
+                size_hint: None, None
+                size: "44dp", "36dp"
+
+        # ── Content (switches between form and preview) ────────────────────────
+        ScreenManager:
+            id: content_manager
+            transition: NoTransition()
+
+            # ── FORM state ───────────────────────────────────────────────────
+            Screen:
+                name: "form"
+                ScrollView:
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "16dp"
+                        spacing: "12dp"
+
+                        # Required fields
+                        FieldLabel:
+                            text: "Title"
+                        TextInput:
+                            id: title_input
+                            hint_text: "Book title"
+                            size_hint_y: None
+                            height: "44dp"
+                            multiline: False
+                            on_text: root.title_text = self.text
+
+                        FieldLabel:
+                            text: "Author"
+                        TextInput:
+                            id: author_input
+                            hint_text: "Author name"
+                            size_hint_y: None
+                            height: "44dp"
+                            multiline: False
+                            on_text: root.author_text = self.text
+
+                        FieldLabel:
+                            text: "Type"
+                        BoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: "44dp"
+                            spacing: "8dp"
+                            Button:
+                                id: fiction_btn
+                                text: "Fiction"
+                                on_press: root.select_fiction("fiction")
+                                color: (1, 1, 1, 1) if root.fiction_selected == 'fiction' else (0.17, 0.17, 0.17, 1)
+                                background_color: 0, 0, 0, 0
+                                background_normal: ""
+                                background_down: ""
+                                canvas.before:
+                                    Color:
+                                        rgba: (0.55, 0.27, 0.07, 1) if root.fiction_selected == 'fiction' else (0.93, 0.91, 0.87, 1)
+                                    RoundedRectangle:
+                                        size: self.size
+                                        pos: self.pos
+                                        radius: [6]
+                            Button:
+                                id: nonfiction_btn
+                                text: "Non-Fiction"
+                                on_press: root.select_fiction("nonfiction")
+                                color: (1, 1, 1, 1) if root.fiction_selected == 'nonfiction' else (0.17, 0.17, 0.17, 1)
+                                background_color: 0, 0, 0, 0
+                                background_normal: ""
+                                background_down: ""
+                                canvas.before:
+                                    Color:
+                                        rgba: (0.55, 0.27, 0.07, 1) if root.fiction_selected == 'nonfiction' else (0.93, 0.91, 0.87, 1)
+                                    RoundedRectangle:
+                                        size: self.size
+                                        pos: self.pos
+                                        radius: [6]
+
+                        # Optional divider
+                        BoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: "28dp"
+                            spacing: "10dp"
+                            Widget:
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.85, 0.83, 0.78, 1
+                                    Rectangle:
+                                        pos: self.x, self.center_y
+                                        size: self.width, 1
+                            Label:
+                                text: "Optional"
+                                size_hint_x: None
+                                width: "72dp"
+                                font_size: "11sp"
+                                color: 0.42, 0.40, 0.38, 1
+                            Widget:
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.85, 0.83, 0.78, 1
+                                    Rectangle:
+                                        pos: self.x, self.center_y
+                                        size: self.width, 1
+
+                        FieldLabel:
+                            text: "Genre"
+                        Spinner:
+                            id: genre_spinner
+                            text: "Select genre"
+                            values: root.GENRES
+                            size_hint_y: None
+                            height: "44dp"
+                            color: 0.17, 0.17, 0.17, 1
+                            background_normal: ""
+                            background_down: ""
+                            background_color: 0, 0, 0, 0
+                            on_text: root.genre_text = self.text
+                            canvas.before:
+                                Color:
+                                    rgba: 0.93, 0.91, 0.87, 1
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [6]
+
+                        FieldLabel:
+                            text: "Year"
+                        TextInput:
+                            id: year_input
+                            hint_text: "e.g. 2023"
+                            size_hint_y: None
+                            height: "44dp"
+                            multiline: False
+                            input_filter: "int"
+                            on_text: root.year_text = self.text
+
+                        # Fetch metadata row
+                        Widget:
+                            size_hint_y: None
+                            height: "8dp"
+                        BoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: "44dp"
+                            spacing: "8dp"
+                            Button:
+                                id: fetch_btn
+                                text: "Fetching…" if root.fetching else "Fetch Metadata"
+                                disabled: not root.title_text or not root.author_text or root.fetching
+                                size_hint_x: 0.55
+                                font_size: "13sp"
+                                color: (0.42, 0.40, 0.38, 1) if self.disabled else (0.55, 0.27, 0.07, 1)
+                                background_color: 0, 0, 0, 0
+                                background_normal: ""
+                                background_down: ""
+                                on_release: root.fetch_metadata()
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.85, 0.83, 0.78, 1
+                                    RoundedRectangle:
+                                        size: self.size
+                                        pos: self.pos
+                                        radius: [6]
+                            Label:
+                                text: root.fetch_status
+                                font_size: "12sp"
+                                color: 0.83, 0.58, 0.42, 1
+                                halign: "left"
+                                valign: "middle"
+                                text_size: self.size
+
+                        # Save / Cancel
+                        Widget:
+                            size_hint_y: None
+                            height: "16dp"
+                        PrimaryButton:
+                            text: "Save Book"
+                            disabled: not (bool(root.title_text) and bool(root.author_text) and bool(root.fiction_selected))
+                            on_release: root.save_book()
+                        Widget:
+                            size_hint_y: None
+                            height: "8dp"
+                        SecondaryButton:
+                            text: "Cancel"
+                            on_release: root.go_back()
+                        Widget:
+                            size_hint_y: None
+                            height: "24dp"
+
+            # ── METADATA_PREVIEW state ────────────────────────────────────────
+            Screen:
+                name: "preview"
+                ScrollView:
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "16dp"
+                        spacing: "16dp"
+
+                        Label:
+                            text: "Book found on Open Library"
+                            font_size: "14sp"
+                            bold: True
+                            color: 0.17, 0.17, 0.17, 1
+                            halign: "left"
+                            valign: "middle"
+                            size_hint_y: None
+                            height: "24dp"
+                            text_size: self.size
+
+                        # Preview card
+                        BoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: "160dp"
+                            padding: "12dp"
+                            spacing: "12dp"
+                            canvas.before:
+                                Color:
+                                    rgba: 0.93, 0.91, 0.87, 1
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [6]
+
+                            # Cover image
+                            BoxLayout:
+                                size_hint: None, 1
+                                width: "90dp"
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.85, 0.83, 0.78, 1
+                                    RoundedRectangle:
+                                        size: self.size
+                                        pos: self.pos
+                                        radius: [4]
+                                AsyncImage:
+                                    id: preview_cover
+                                    source: ""
+                                    allow_stretch: True
+                                    keep_ratio: True
+
+                            # Text info
+                            BoxLayout:
+                                orientation: "vertical"
+                                spacing: "6dp"
+                                Label:
+                                    id: preview_title
+                                    text: ""
+                                    font_size: "15sp"
+                                    bold: True
+                                    color: 0.17, 0.17, 0.17, 1
+                                    halign: "left"
+                                    valign: "top"
+                                    text_size: self.width, None
+                                    size_hint_y: None
+                                    height: "48dp"
+                                Label:
+                                    id: preview_author
+                                    text: ""
+                                    font_size: "13sp"
+                                    color: 0.42, 0.40, 0.38, 1
+                                    halign: "left"
+                                    valign: "top"
+                                    text_size: self.width, None
+                                    size_hint_y: None
+                                    height: "22dp"
+                                Label:
+                                    id: preview_year
+                                    text: ""
+                                    font_size: "12sp"
+                                    color: 0.42, 0.40, 0.38, 1
+                                    halign: "left"
+                                    valign: "top"
+                                    text_size: self.width, None
+                                    size_hint_y: None
+                                    height: "20dp"
+                                Label:
+                                    id: preview_genre
+                                    text: ""
+                                    font_size: "12sp"
+                                    color: 0.55, 0.27, 0.07, 1
+                                    halign: "left"
+                                    valign: "top"
+                                    text_size: self.width, None
+                                    size_hint_y: None
+                                    height: "20dp"
+
+                        PrimaryButton:
+                            text: "Use This"
+                            on_release: root.use_metadata()
+                        SecondaryButton:
+                            text: "Skip"
+                            on_release: root.skip_metadata()
+                        Widget:
+                            size_hint_y: None
+                            height: "24dp"
