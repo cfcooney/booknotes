@@ -1,0 +1,27 @@
+[project]
+name = "booknotes"
+version = "0.1.0"
+description = "Capture and organize notes while reading books"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "kivy>=2.3.1",
+    "sqlalchemy>=2.0.50",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.0",
+    "ruff>=0.15.15",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = [
+    "E501",
+    "E402",
+]

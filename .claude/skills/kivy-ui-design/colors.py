@@ -1,0 +1,14 @@
+# colors.py
+BACKGROUND_PRIMARY = (0.96, 0.94, 0.91, 1)
+BACKGROUND_SECONDARY = (0.93, 0.91, 0.87, 1)
+TEXT_PRIMARY = (0.17, 0.17, 0.17, 1)
+TEXT_SECONDARY = (0.42, 0.40, 0.38, 1)
+ACCENT = (0.55, 0.27, 0.07, 1)
+ACCENT_LIGHT = (0.83, 0.58, 0.42, 1)
+DIVIDER = (0.85, 0.83, 0.78, 1)
+
+# Entry type pill colors
+TYPE_QUOTE = (0.83, 0.58, 0.42, 1)
+TYPE_NOTE = (0.42, 0.56, 0.62, 1)
+TYPE_FACT = (0.48, 0.62, 0.49, 1)
+TYPE_PERSON = (0.61, 0.55, 0.71, 1)
