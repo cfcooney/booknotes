@@ -1,8 +1,8 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
 
+from models.database import init_db
 from screens.home_screen import HomeScreen
-from services.database import init_db
 
 
 class BookNotesApp(App):

@@ -1,17 +1,5 @@
-from sqlalchemy import Column, ForeignKey, Table
+"""Re-exports junction tables from models.junction for backward compatibility."""
 
-from .base import Base
+from .junction import entry_people, entry_topics
 
-entry_topics = Table(
-    "entry_topics",
-    Base.metadata,
-    Column("entry_id", ForeignKey("entries.id"), primary_key=True),
-    Column("topic_id", ForeignKey("topics.id"), primary_key=True),
-)
-
-entry_people = Table(
-    "entry_people",
-    Base.metadata,
-    Column("entry_id", ForeignKey("entries.id"), primary_key=True),
-    Column("person_id", ForeignKey("people.id"), primary_key=True),
-)
+__all__ = ["entry_topics", "entry_people"]

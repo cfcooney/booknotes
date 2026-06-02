@@ -7,7 +7,7 @@ from kivy.uix.screenmanager import Screen
 from sqlalchemy import select
 
 from models import Book
-from services.database import get_session
+from models.database import get_session
 
 
 class BookCard(BoxLayout):

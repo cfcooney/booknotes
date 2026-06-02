@@ -1,5 +1,5 @@
-from sqlalchemy.orm import DeclarativeBase
+"""Re-exports Base from models.database for backward compatibility."""
 
+from .database import Base
 
-class Base(DeclarativeBase):
-    """Application declarative base for SQLAlchemy models."""
+__all__ = ["Base"]

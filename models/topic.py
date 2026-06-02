@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .associations import entry_topics
-from .base import Base
+from .database import Base
+from .junction import entry_topics
 
 if TYPE_CHECKING:
     from .entry import Entry

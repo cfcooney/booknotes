@@ -6,24 +6,30 @@ from typing import TYPE_CHECKING
 from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .associations import entry_people, entry_topics
-from .base import Base
+from .database import Base
+from .junction import entry_people, entry_topics
 
 if TYPE_CHECKING:
     from .book import Book
     from .person import Person
     from .topic import Topic
 
+# type values: quote / note / fact
+# importance values: 1 (low) / 2 (medium) / 3 (high)
+
 
 class Entry(Base):
-    """A single note attached to a book."""
+    """A single note, quote, or fact captured while reading a book."""
 
     __tablename__ = "entries"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     book_id: Mapped[int] = mapped_column(ForeignKey("books.id"), index=True)
-    title: Mapped[str] = mapped_column(String(255))
-    content: Mapped[str] = mapped_column(Text)
+    type: Mapped[str] = mapped_column(String(20))
+    text: Mapped[str] = mapped_column(Text)
+    page: Mapped[int | None] = mapped_column(nullable=True)
+    key_takeaway: Mapped[bool] = mapped_column(default=False)
+    importance: Mapped[int | None] = mapped_column(nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
