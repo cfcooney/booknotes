@@ -1,0 +1,19 @@
+<PrimaryButton@Button>:
+    size_hint_y: None
+    height: "44dp"
+    color: 1, 1, 1, 1
+    background_color: 0, 0, 0, 0
+    background_normal: ""
+    background_down: ""
+    canvas.before:
+        Color:
+            rgba: (0.45, 0.20, 0.05, 1) if self.state == 'down' else (0.55, 0.27, 0.07, 1)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [6]
+
+<ScreenTitle@Label>:
+    font_size: "20sp"
+    bold: True
+    color: 1, 1, 1, 1

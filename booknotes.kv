@@ -1,20 +1,111 @@
 #:kivy 2.3.1
+#:include theme.kv
 
-<HomeScreen>:
+<BookCard>:
+    orientation: "horizontal"
+    size_hint_y: None
+    height: "72dp"
+    padding: "16dp", "12dp"
+    canvas.before:
+        Color:
+            rgba: 0.93, 0.91, 0.87, 1
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [6]
     BoxLayout:
         orientation: "vertical"
-        padding: "20dp"
-        spacing: "12dp"
-
+        spacing: "2dp"
         Label:
-            text: "Book Notes"
-            font_size: "28sp"
+            text: root.title_text
+            font_size: "16sp"
             bold: True
-            size_hint_y: None
-            height: "48dp"
-
-        Label:
-            text: "Capture ideas, quotes, and references while you read."
-            text_size: self.width, None
+            color: 0.17, 0.17, 0.17, 1
             halign: "left"
             valign: "middle"
+            text_size: self.size
+        Label:
+            text: root.author_text
+            font_size: "14sp"
+            color: 0.42, 0.40, 0.38, 1
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+
+<AddBookPopup>:
+    title: "Add Book"
+    size_hint: 0.5, None
+    height: "280dp"
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "12dp"
+        padding: "16dp"
+        TextInput:
+            id: title_input
+            hint_text: "Title"
+            size_hint_y: None
+            height: "44dp"
+            multiline: False
+        TextInput:
+            id: author_input
+            hint_text: "Author"
+            size_hint_y: None
+            height: "44dp"
+            multiline: False
+        PrimaryButton:
+            text: "Save"
+            on_release: root.save()
+
+<HomeScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.96, 0.94, 0.91, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    FloatLayout:
+        BoxLayout:
+            orientation: "vertical"
+            size: root.size
+            pos: root.pos
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "52dp"
+                padding: "16dp", "8dp"
+                canvas.before:
+                    Color:
+                        rgba: 0.55, 0.27, 0.07, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                ScreenTitle:
+                    text: "Book Notes"
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.size
+            ScrollView:
+                BoxLayout:
+                    id: book_list
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: "8dp"
+                    padding: "16dp"
+        Button:
+            text: "+"
+            size_hint: None, None
+            size: "56dp", "56dp"
+            pos_hint: {"right": 0.97, "y": 0.03}
+            font_size: "24sp"
+            color: 1, 1, 1, 1
+            background_color: 0, 0, 0, 0
+            background_normal: ""
+            background_down: ""
+            on_release: root.open_add_book_popup()
+            canvas.before:
+                Color:
+                    rgba: (0.45, 0.20, 0.05, 1) if self.state == 'down' else (0.55, 0.27, 0.07, 1)
+                Ellipse:
+                    size: self.size
+                    pos: self.pos
