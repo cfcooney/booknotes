@@ -140,6 +140,7 @@ class AddBookScreen(Screen):
         year = int(self.year_text) if self.year_text.strip().isdigit() else None
         m = self._metadata
 
+        book_id = None
         session = get_session()
         try:
             book = Book(
@@ -156,8 +157,10 @@ class AddBookScreen(Screen):
             )
             session.add(book)
             session.commit()
+            book_id = book.id  # capture before session closes
         finally:
             session.close()
 
-        # TODO: navigate to BookScreen(book_id) once that screen exists
-        self.manager.current = "home"
+        book_screen = self.manager.get_screen("book")
+        book_screen.book_id = book_id
+        self.manager.current = "book"

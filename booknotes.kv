@@ -5,8 +5,9 @@
 <BookCard>:
     orientation: "horizontal"
     size_hint_y: None
-    height: "72dp"
-    padding: "16dp", "12dp"
+    height: "100dp"
+    padding: "12dp"
+    spacing: "12dp"
     canvas.before:
         Color:
             rgba: 0.93, 0.91, 0.87, 1
@@ -14,9 +15,29 @@
             size: self.size
             pos: self.pos
             radius: [6]
+
+    # Cover thumbnail (60dp wide, full inner height)
+    BoxLayout:
+        size_hint: None, 1
+        width: "60dp"
+        canvas.before:
+            Color:
+                rgba: 0.85, 0.83, 0.78, 1
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: [4]
+        AsyncImage:
+            source: root.cover_url
+            allow_stretch: True
+            keep_ratio: True
+
+    # Text info
     BoxLayout:
         orientation: "vertical"
-        spacing: "2dp"
+        spacing: "4dp"
+        padding: 0, "8dp", 0, "8dp"
+
         Label:
             text: root.title_text
             font_size: "16sp"
@@ -24,14 +45,79 @@
             color: 0.17, 0.17, 0.17, 1
             halign: "left"
             valign: "middle"
-            text_size: self.size
+            text_size: self.width, None
+            size_hint_y: None
+            height: "22dp"
+
         Label:
             text: root.author_text
             font_size: "14sp"
             color: 0.42, 0.40, 0.38, 1
             halign: "left"
             valign: "middle"
-            text_size: self.size
+            text_size: self.width, None
+            size_hint_y: None
+            height: "20dp"
+
+        # Genre pill — hidden (height: 0) when genre_text is empty
+        Label:
+            text: root.genre_text
+            font_size: "11sp"
+            color: 0.55, 0.27, 0.07, 1
+            halign: "left"
+            valign: "middle"
+            text_size: None, None
+            size_hint: None, None
+            width: self.texture_size[0] + dp(12)
+            height: "18dp" if root.genre_text else 0
+            opacity: 1 if root.genre_text else 0
+            canvas.before:
+                Color:
+                    rgba: 0.83, 0.58, 0.42, 0.2
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [9]
+
+        # Last entry date — hidden when empty
+        Label:
+            text: root.last_entry_text
+            font_size: "11sp"
+            color: 0.42, 0.40, 0.38, 1
+            halign: "left"
+            valign: "middle"
+            text_size: self.width, None
+            size_hint_y: None
+            height: "16dp" if root.last_entry_text else 0
+            opacity: 1 if root.last_entry_text else 0
+
+<EmptyState>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: "160dp"
+    spacing: "8dp"
+    padding: "32dp", "48dp"
+
+    Label:
+        text: "No books yet"
+        font_size: "18sp"
+        bold: True
+        color: 0.42, 0.40, 0.38, 1
+        halign: "center"
+        valign: "middle"
+        text_size: self.size
+        size_hint_y: None
+        height: "28dp"
+
+    Label:
+        text: "Tap + Add Book to get started"
+        font_size: "14sp"
+        color: 0.42, 0.40, 0.38, 1
+        halign: "center"
+        valign: "middle"
+        text_size: self.size
+        size_hint_y: None
+        height: "20dp"
 
 <HomeScreen>:
     canvas.before:
@@ -40,52 +126,96 @@
         Rectangle:
             size: self.size
             pos: self.pos
-    FloatLayout:
+    BoxLayout:
+        orientation: "vertical"
+        size: root.size
+        pos: root.pos
+
+        # Header
         BoxLayout:
-            orientation: "vertical"
-            size: root.size
-            pos: root.pos
-            BoxLayout:
-                orientation: "horizontal"
-                size_hint_y: None
-                height: "52dp"
-                padding: "16dp", "8dp"
+            orientation: "horizontal"
+            size_hint_y: None
+            height: "52dp"
+            padding: "16dp", "8dp"
+            spacing: "8dp"
+            canvas.before:
+                Color:
+                    rgba: 0.55, 0.27, 0.07, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            ScreenTitle:
+                text: "BookNotes"
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+            Button:
+                text: "+ Add Book"
+                size_hint: None, None
+                size: "110dp", "36dp"
+                font_size: "13sp"
+                color: 0.55, 0.27, 0.07, 1
+                background_color: 0, 0, 0, 0
+                background_normal: ""
+                background_down: ""
+                on_release: root.go_to_add_book()
                 canvas.before:
                     Color:
-                        rgba: 0.55, 0.27, 0.07, 1
+                        rgba: (0.85, 0.83, 0.78, 1) if self.state == 'down' else (0.96, 0.94, 0.91, 1)
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [6]
+
+        # Tab bar
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: "44dp"
+            canvas.before:
+                Color:
+                    rgba: 0.93, 0.91, 0.87, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            Button:
+                text: "Currently Reading"
+                font_size: "13sp"
+                on_release: root.switch_tab("reading")
+                color: (1, 1, 1, 1) if root.active_tab == 'reading' else (0.55, 0.27, 0.07, 1)
+                background_color: 0, 0, 0, 0
+                background_normal: ""
+                background_down: ""
+                canvas.before:
+                    Color:
+                        rgba: (0.55, 0.27, 0.07, 1) if root.active_tab == 'reading' else (0.93, 0.91, 0.87, 1)
                     Rectangle:
                         size: self.size
                         pos: self.pos
-                ScreenTitle:
-                    text: "Book Notes"
-                    halign: "left"
-                    valign: "middle"
-                    text_size: self.size
-            ScrollView:
-                BoxLayout:
-                    id: book_list
-                    orientation: "vertical"
-                    size_hint_y: None
-                    height: self.minimum_height
-                    spacing: "8dp"
-                    padding: "16dp"
-        Button:
-            text: "+"
-            size_hint: None, None
-            size: "56dp", "56dp"
-            pos_hint: {"right": 0.97, "y": 0.03}
-            font_size: "24sp"
-            color: 1, 1, 1, 1
-            background_color: 0, 0, 0, 0
-            background_normal: ""
-            background_down: ""
-            on_release: root.go_to_add_book()
-            canvas.before:
-                Color:
-                    rgba: (0.45, 0.20, 0.05, 1) if self.state == 'down' else (0.55, 0.27, 0.07, 1)
-                Ellipse:
-                    size: self.size
-                    pos: self.pos
+            Button:
+                text: "All Books"
+                font_size: "13sp"
+                on_release: root.switch_tab("all")
+                color: (1, 1, 1, 1) if root.active_tab == 'all' else (0.55, 0.27, 0.07, 1)
+                background_color: 0, 0, 0, 0
+                background_normal: ""
+                background_down: ""
+                canvas.before:
+                    Color:
+                        rgba: (0.55, 0.27, 0.07, 1) if root.active_tab == 'all' else (0.93, 0.91, 0.87, 1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+        # Scrollable book list
+        ScrollView:
+            BoxLayout:
+                id: book_list
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: "8dp"
+                padding: "16dp"
 
 <AddBookScreen>:
     canvas.before:
@@ -425,3 +555,1110 @@
                         Widget:
                             size_hint_y: None
                             height: "24dp"
+
+# ── Book Screen ───────────────────────────────────────────────────────────────
+
+<SectionHeader>:
+    size_hint_y: None
+    height: "32dp"
+    padding: "16dp", "6dp"
+    canvas.before:
+        Color:
+            rgba: 0.85, 0.83, 0.78, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    Label:
+        text: root.header_text
+        font_size: "12sp"
+        bold: True
+        color: 0.42, 0.40, 0.38, 1
+        halign: "left"
+        valign: "middle"
+        text_size: self.size
+
+<PersonCard>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: "80dp"
+    padding: "12dp", "8dp"
+    spacing: "4dp"
+    canvas.before:
+        Color:
+            rgba: 0.93, 0.91, 0.87, 1
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [6]
+    Label:
+        text: root.name_text
+        font_size: "15sp"
+        bold: True
+        color: 0.17, 0.17, 0.17, 1
+        halign: "left"
+        valign: "top"
+        text_size: self.width, None
+        size_hint_y: None
+        height: "22dp"
+    Label:
+        text: root.description_text
+        font_size: "13sp"
+        color: 0.42, 0.40, 0.38, 1
+        halign: "left"
+        valign: "top"
+        text_size: self.width, None
+        size_hint_y: None
+        height: "40dp"
+        max_lines: 2
+
+<EntryItem>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: "112dp"
+    padding: "12dp", "8dp"
+    spacing: "4dp"
+    canvas.before:
+        Color:
+            rgba: 0.93, 0.91, 0.87, 1
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [6]
+
+    # Top row: type pill · star · page
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: None
+        height: "22dp"
+        spacing: "8dp"
+        Label:
+            text: root.type_label
+            font_size: "11sp"
+            color: 1, 1, 1, 1
+            halign: "center"
+            valign: "middle"
+            text_size: None, None
+            size_hint: None, None
+            size: self.texture_size[0] + dp(12), "18dp"
+            canvas.before:
+                Color:
+                    rgba: root.type_color
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [9]
+        Label:
+            text: "★" if root.is_key_takeaway else "☆"
+            font_size: "14sp"
+            color: (0.55, 0.27, 0.07, 1) if root.is_key_takeaway else (0.85, 0.83, 0.78, 1)
+            size_hint: None, None
+            size: "20dp", "20dp"
+        Widget:
+        Label:
+            text: root.page_text
+            font_size: "11sp"
+            color: 0.42, 0.40, 0.38, 1
+            size_hint: None, None
+            size: "52dp", "18dp"
+            halign: "right"
+            valign: "middle"
+            text_size: self.size
+
+    # Entry text (max 3 lines)
+    Label:
+        text: root.text_preview
+        font_size: "14sp"
+        color: 0.17, 0.17, 0.17, 1
+        halign: "left"
+        valign: "top"
+        text_size: self.width, None
+        size_hint_y: None
+        height: "62dp"
+        max_lines: 3
+
+    # Bottom row: topics · timestamp
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: None
+        height: "16dp"
+        Label:
+            text: root.topic_text
+            font_size: "11sp"
+            color: 0.55, 0.27, 0.07, 1
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+        Label:
+            text: root.time_text
+            font_size: "11sp"
+            color: 0.42, 0.40, 0.38, 1
+            halign: "right"
+            valign: "middle"
+            size_hint_x: None
+            width: "80dp"
+            text_size: self.size
+
+<AddPersonPopup>:
+    title: "Add Character"
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "12dp"
+        padding: "16dp"
+        FieldLabel:
+            text: "Name"
+        TextInput:
+            id: name_input
+            hint_text: "Character name"
+            size_hint_y: None
+            height: "44dp"
+            multiline: False
+        FieldLabel:
+            text: "Description (optional)"
+        TextInput:
+            id: desc_input
+            hint_text: "Brief description"
+            size_hint_y: None
+            height: "80dp"
+        Widget:
+        PrimaryButton:
+            text: "Save Character"
+            on_release: root.save()
+        SecondaryButton:
+            text: "Cancel"
+            on_release: root.dismiss()
+
+<BookScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.96, 0.94, 0.91, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    FloatLayout:
+        size: root.size
+        pos: root.pos
+
+        BoxLayout:
+            orientation: "vertical"
+            size: root.size
+            pos: root.pos
+
+            # ── HEADER ────────────────────────────────────────────────────────
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: dp(52) + (dp(24) if root.show_progress else 0)
+                canvas.before:
+                    Color:
+                        rgba: 0.55, 0.27, 0.07, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: "52dp"
+                    padding: "8dp"
+                    spacing: "8dp"
+
+                    Button:
+                        text: "←"
+                        size_hint: None, None
+                        size: "44dp", "36dp"
+                        font_size: "20sp"
+                        color: 1, 1, 1, 1
+                        background_color: 0, 0, 0, 0
+                        background_normal: ""
+                        background_down: ""
+                        on_release: root.go_back()
+
+                    BoxLayout:
+                        size_hint: None, None
+                        size: "36dp", "44dp"
+                        canvas.before:
+                            Color:
+                                rgba: 0.45, 0.20, 0.05, 1
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [3]
+                        AsyncImage:
+                            source: root.book_cover_url
+                            allow_stretch: True
+                            keep_ratio: True
+
+                    BoxLayout:
+                        orientation: "vertical"
+                        spacing: "2dp"
+                        Label:
+                            text: root.book_title
+                            font_size: "15sp"
+                            bold: True
+                            color: 1, 1, 1, 1
+                            halign: "left"
+                            valign: "middle"
+                            text_size: self.size
+                        Label:
+                            text: root.book_author
+                            font_size: "12sp"
+                            color: 1, 1, 1, 0.8
+                            halign: "left"
+                            valign: "middle"
+                            text_size: self.size
+
+                    Label:
+                        text: root.status_label
+                        font_size: "11sp"
+                        bold: True
+                        color: 0.55, 0.27, 0.07, 1
+                        size_hint: None, None
+                        size: self.texture_size[0] + dp(14), "24dp"
+                        halign: "center"
+                        valign: "middle"
+                        canvas.before:
+                            Color:
+                                rgba: 0.96, 0.94, 0.91, 1
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [12]
+
+                # Progress bar row
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: "24dp" if root.show_progress else 0
+                    opacity: 1 if root.show_progress else 0
+                    padding: "16dp", "4dp"
+                    spacing: "8dp"
+                    Widget:
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 0.25
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [3]
+                            Color:
+                                rgba: 1, 1, 1, 0.9
+                            RoundedRectangle:
+                                size: self.width * root.progress_pct, self.height
+                                pos: self.pos
+                                radius: [3]
+                    Label:
+                        text: root.progress_text
+                        size_hint: None, None
+                        size: "104dp", "16dp"
+                        font_size: "11sp"
+                        color: 1, 1, 1, 0.85
+                        halign: "right"
+                        valign: "middle"
+                        text_size: self.size
+
+            # ── TAB BAR ───────────────────────────────────────────────────────
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: "44dp"
+                canvas.before:
+                    Color:
+                        rgba: 0.93, 0.91, 0.87, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Button:
+                    text: "Entries"
+                    font_size: "13sp"
+                    on_release: root.switch_tab("entries")
+                    color: (1,1,1,1) if root.active_tab=='entries' else (0.55,0.27,0.07,1)
+                    background_color: 0, 0, 0, 0
+                    background_normal: ""
+                    background_down: ""
+                    canvas.before:
+                        Color:
+                            rgba: (0.55,0.27,0.07,1) if root.active_tab=='entries' else (0.93,0.91,0.87,1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                Button:
+                    text: "Characters"
+                    font_size: "13sp"
+                    on_release: root.switch_tab("characters")
+                    color: (1,1,1,1) if root.active_tab=='characters' else (0.55,0.27,0.07,1)
+                    background_color: 0, 0, 0, 0
+                    background_normal: ""
+                    background_down: ""
+                    canvas.before:
+                        Color:
+                            rgba: (0.55,0.27,0.07,1) if root.active_tab=='characters' else (0.93,0.91,0.87,1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                Button:
+                    text: "About"
+                    font_size: "13sp"
+                    on_release: root.switch_tab("about")
+                    color: (1,1,1,1) if root.active_tab=='about' else (0.55,0.27,0.07,1)
+                    background_color: 0, 0, 0, 0
+                    background_normal: ""
+                    background_down: ""
+                    canvas.before:
+                        Color:
+                            rgba: (0.55,0.27,0.07,1) if root.active_tab=='about' else (0.93,0.91,0.87,1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
+            # ── TAB CONTENT ───────────────────────────────────────────────────
+            ScreenManager:
+                id: tab_manager
+                transition: NoTransition()
+
+                # ENTRIES ──────────────────────────────────────────────────────
+                Screen:
+                    name: "entries"
+                    BoxLayout:
+                        orientation: "vertical"
+                        BoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: "44dp"
+                            canvas.before:
+                                Color:
+                                    rgba: 0.96, 0.94, 0.91, 1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
+                            ScrollView:
+                                do_scroll_y: False
+                                BoxLayout:
+                                    orientation: "horizontal"
+                                    size_hint_x: None
+                                    width: self.minimum_width
+                                    spacing: "6dp"
+                                    padding: "12dp", "8dp"
+                                    Button:
+                                        text: "All"
+                                        size_hint: None, None
+                                        size: self.texture_size[0] + dp(16), "28dp"
+                                        font_size: "12sp"
+                                        on_release: root.set_filter("all")
+                                        color: (1,1,1,1) if root.active_filter=='all' else (0.55,0.27,0.07,1)
+                                        background_color: 0,0,0,0
+                                        background_normal: ""
+                                        background_down: ""
+                                        canvas.before:
+                                            Color:
+                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='all' else (0.85,0.83,0.78,1)
+                                            RoundedRectangle:
+                                                size: self.size
+                                                pos: self.pos
+                                                radius: [14]
+                                    Button:
+                                        text: "Quotes"
+                                        size_hint: None, None
+                                        size: self.texture_size[0] + dp(16), "28dp"
+                                        font_size: "12sp"
+                                        on_release: root.set_filter("quote")
+                                        color: (1,1,1,1) if root.active_filter=='quote' else (0.55,0.27,0.07,1)
+                                        background_color: 0,0,0,0
+                                        background_normal: ""
+                                        background_down: ""
+                                        canvas.before:
+                                            Color:
+                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='quote' else (0.85,0.83,0.78,1)
+                                            RoundedRectangle:
+                                                size: self.size
+                                                pos: self.pos
+                                                radius: [14]
+                                    Button:
+                                        text: "Notes"
+                                        size_hint: None, None
+                                        size: self.texture_size[0] + dp(16), "28dp"
+                                        font_size: "12sp"
+                                        on_release: root.set_filter("note")
+                                        color: (1,1,1,1) if root.active_filter=='note' else (0.55,0.27,0.07,1)
+                                        background_color: 0,0,0,0
+                                        background_normal: ""
+                                        background_down: ""
+                                        canvas.before:
+                                            Color:
+                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='note' else (0.85,0.83,0.78,1)
+                                            RoundedRectangle:
+                                                size: self.size
+                                                pos: self.pos
+                                                radius: [14]
+                                    Button:
+                                        text: "Facts"
+                                        size_hint: None, None
+                                        size: self.texture_size[0] + dp(16), "28dp"
+                                        font_size: "12sp"
+                                        on_release: root.set_filter("fact")
+                                        color: (1,1,1,1) if root.active_filter=='fact' else (0.55,0.27,0.07,1)
+                                        background_color: 0,0,0,0
+                                        background_normal: ""
+                                        background_down: ""
+                                        canvas.before:
+                                            Color:
+                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='fact' else (0.85,0.83,0.78,1)
+                                            RoundedRectangle:
+                                                size: self.size
+                                                pos: self.pos
+                                                radius: [14]
+                                    Button:
+                                        text: "★ Key"
+                                        size_hint: None, None
+                                        size: self.texture_size[0] + dp(16), "28dp"
+                                        font_size: "12sp"
+                                        on_release: root.set_filter("key")
+                                        color: (1,1,1,1) if root.active_filter=='key' else (0.55,0.27,0.07,1)
+                                        background_color: 0,0,0,0
+                                        background_normal: ""
+                                        background_down: ""
+                                        canvas.before:
+                                            Color:
+                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='key' else (0.85,0.83,0.78,1)
+                                            RoundedRectangle:
+                                                size: self.size
+                                                pos: self.pos
+                                                radius: [14]
+                            BoxLayout:
+                                orientation: "horizontal"
+                                size_hint: None, None
+                                size: "132dp", "44dp"
+                                padding: "4dp", "8dp"
+                                spacing: "2dp"
+                                Button:
+                                    text: "Journal"
+                                    font_size: "11sp"
+                                    on_release: root.set_view("journal")
+                                    color: (1,1,1,1) if root.active_view=='journal' else (0.55,0.27,0.07,1)
+                                    background_color: 0,0,0,0
+                                    background_normal: ""
+                                    background_down: ""
+                                    canvas.before:
+                                        Color:
+                                            rgba: (0.55,0.27,0.07,1) if root.active_view=='journal' else (0.85,0.83,0.78,1)
+                                        RoundedRectangle:
+                                            size: self.size
+                                            pos: self.pos
+                                            radius: [14]
+                                Button:
+                                    text: "Grouped"
+                                    font_size: "11sp"
+                                    on_release: root.set_view("organised")
+                                    color: (1,1,1,1) if root.active_view=='organised' else (0.55,0.27,0.07,1)
+                                    background_color: 0,0,0,0
+                                    background_normal: ""
+                                    background_down: ""
+                                    canvas.before:
+                                        Color:
+                                            rgba: (0.55,0.27,0.07,1) if root.active_view=='organised' else (0.85,0.83,0.78,1)
+                                        RoundedRectangle:
+                                            size: self.size
+                                            pos: self.pos
+                                            radius: [14]
+                        ScrollView:
+                            BoxLayout:
+                                id: entry_list
+                                orientation: "vertical"
+                                size_hint_y: None
+                                height: self.minimum_height
+                                spacing: "8dp"
+                                padding: "16dp"
+
+                # CHARACTERS ───────────────────────────────────────────────────
+                Screen:
+                    name: "characters"
+                    BoxLayout:
+                        orientation: "vertical"
+                        BoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: "48dp"
+                            padding: "16dp", "8dp"
+                            spacing: "8dp"
+                            canvas.before:
+                                Color:
+                                    rgba: 0.93, 0.91, 0.87, 1
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
+                            Widget:
+                            Button:
+                                text: "+ Add Character"
+                                size_hint: None, None
+                                size: "140dp", "32dp"
+                                font_size: "13sp"
+                                color: 0.55, 0.27, 0.07, 1
+                                background_color: 0, 0, 0, 0
+                                background_normal: ""
+                                background_down: ""
+                                on_release: root.open_add_character()
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.85, 0.83, 0.78, 1
+                                    RoundedRectangle:
+                                        size: self.size
+                                        pos: self.pos
+                                        radius: [6]
+                        ScrollView:
+                            BoxLayout:
+                                id: character_list
+                                orientation: "vertical"
+                                size_hint_y: None
+                                height: self.minimum_height
+                                spacing: "8dp"
+                                padding: "16dp"
+
+                # ABOUT ────────────────────────────────────────────────────────
+                Screen:
+                    name: "about"
+                    ScrollView:
+                        BoxLayout:
+                            orientation: "vertical"
+                            size_hint_y: None
+                            height: self.minimum_height
+                            spacing: "16dp"
+                            padding: "16dp"
+
+                            BoxLayout:
+                                size_hint: None, None
+                                size: "100dp", "140dp"
+                                pos_hint: {"center_x": 0.5}
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.85, 0.83, 0.78, 1
+                                    RoundedRectangle:
+                                        size: self.size
+                                        pos: self.pos
+                                        radius: [6]
+                                AsyncImage:
+                                    source: root.book_cover_url
+                                    allow_stretch: True
+                                    keep_ratio: True
+
+                            # Metadata card
+                            BoxLayout:
+                                orientation: "vertical"
+                                size_hint_y: None
+                                height: self.minimum_height
+                                spacing: "6dp"
+                                padding: "16dp"
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.93, 0.91, 0.87, 1
+                                    RoundedRectangle:
+                                        size: self.size
+                                        pos: self.pos
+                                        radius: [6]
+                                Label:
+                                    text: root.book_title
+                                    font_size: "17sp"
+                                    bold: True
+                                    color: 0.17, 0.17, 0.17, 1
+                                    halign: "left"
+                                    valign: "top"
+                                    text_size: self.width, None
+                                    size_hint_y: None
+                                    height: "26dp"
+                                Label:
+                                    text: "by " + root.book_author
+                                    font_size: "14sp"
+                                    color: 0.42, 0.40, 0.38, 1
+                                    halign: "left"
+                                    valign: "top"
+                                    text_size: self.width, None
+                                    size_hint_y: None
+                                    height: "20dp"
+                                Label:
+                                    text: (root.about_year + " · " if root.about_year else "") + root.about_genre
+                                    font_size: "13sp"
+                                    color: 0.42, 0.40, 0.38, 1
+                                    halign: "left"
+                                    valign: "top"
+                                    text_size: self.width, None
+                                    size_hint_y: None
+                                    height: "18dp" if (root.about_year or root.about_genre) else 0
+                                    opacity: 1 if (root.about_year or root.about_genre) else 0
+                                Label:
+                                    text: "ISBN: " + root.about_isbn
+                                    font_size: "12sp"
+                                    color: 0.42, 0.40, 0.38, 1
+                                    halign: "left"
+                                    valign: "top"
+                                    text_size: self.width, None
+                                    size_hint_y: None
+                                    height: "18dp" if root.about_isbn else 0
+                                    opacity: 1 if root.about_isbn else 0
+                                Widget:
+                                    size_hint_y: None
+                                    height: "12dp"
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0.85, 0.83, 0.78, 1
+                                        Rectangle:
+                                            pos: self.x, self.center_y
+                                            size: self.width, 1
+                                BoxLayout:
+                                    orientation: "horizontal"
+                                    size_hint_y: None
+                                    height: "20dp"
+                                    Label:
+                                        text: "Started: " + (root.about_start or "—")
+                                        font_size: "12sp"
+                                        color: 0.42, 0.40, 0.38, 1
+                                        halign: "left"
+                                        valign: "middle"
+                                        text_size: self.size
+                                    Label:
+                                        text: "Finished: " + (root.about_finish or "—")
+                                        font_size: "12sp"
+                                        color: 0.42, 0.40, 0.38, 1
+                                        halign: "right"
+                                        valign: "middle"
+                                        text_size: self.size
+
+                            # Stats row
+                            BoxLayout:
+                                orientation: "horizontal"
+                                size_hint_y: None
+                                height: "64dp"
+                                spacing: "2dp"
+                                BoxLayout:
+                                    orientation: "vertical"
+                                    padding: "8dp"
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0.93, 0.91, 0.87, 1
+                                        RoundedRectangle:
+                                            size: self.size
+                                            pos: self.pos
+                                            radius: [6, 0, 0, 6]
+                                    Label:
+                                        text: str(root.about_quote_count)
+                                        font_size: "20sp"
+                                        bold: True
+                                        color: 0.83, 0.58, 0.42, 1
+                                        halign: "center"
+                                        valign: "middle"
+                                        text_size: self.size
+                                    Label:
+                                        text: "Quotes"
+                                        font_size: "11sp"
+                                        color: 0.42, 0.40, 0.38, 1
+                                        halign: "center"
+                                        valign: "middle"
+                                        text_size: self.size
+                                BoxLayout:
+                                    orientation: "vertical"
+                                    padding: "8dp"
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0.93, 0.91, 0.87, 1
+                                        Rectangle:
+                                            size: self.size
+                                            pos: self.pos
+                                    Label:
+                                        text: str(root.about_note_count)
+                                        font_size: "20sp"
+                                        bold: True
+                                        color: 0.42, 0.56, 0.62, 1
+                                        halign: "center"
+                                        valign: "middle"
+                                        text_size: self.size
+                                    Label:
+                                        text: "Notes"
+                                        font_size: "11sp"
+                                        color: 0.42, 0.40, 0.38, 1
+                                        halign: "center"
+                                        valign: "middle"
+                                        text_size: self.size
+                                BoxLayout:
+                                    orientation: "vertical"
+                                    padding: "8dp"
+                                    canvas.before:
+                                        Color:
+                                            rgba: 0.93, 0.91, 0.87, 1
+                                        RoundedRectangle:
+                                            size: self.size
+                                            pos: self.pos
+                                            radius: [0, 6, 6, 0]
+                                    Label:
+                                        text: str(root.about_fact_count)
+                                        font_size: "20sp"
+                                        bold: True
+                                        color: 0.48, 0.62, 0.49, 1
+                                        halign: "center"
+                                        valign: "middle"
+                                        text_size: self.size
+                                    Label:
+                                        text: "Facts"
+                                        font_size: "11sp"
+                                        color: 0.42, 0.40, 0.38, 1
+                                        halign: "center"
+                                        valign: "middle"
+                                        text_size: self.size
+
+                            SecondaryButton:
+                                text: "Export Notes"
+                                on_release: root.export_notes()
+                            SecondaryButton:
+                                text: "Edit Book"
+                                on_release: root.edit_book()
+                            PrimaryButton:
+                                text: "Finished ✓" if root.is_finished else "Mark as Finished"
+                                disabled: root.is_finished
+                                on_release: root.mark_finished()
+                            Widget:
+                                size_hint_y: None
+                                height: "24dp"
+
+        # FAB (entries tab only)
+        Button:
+            text: "+"
+            size_hint: None, None
+            size: "56dp", "56dp"
+            pos_hint: {"right": 0.97, "y": 0.03}
+            font_size: "24sp"
+            color: 1, 1, 1, 1
+            background_color: 0, 0, 0, 0
+            background_normal: ""
+            background_down: ""
+            opacity: 1 if root.active_tab == 'entries' else 0
+            disabled: root.active_tab != 'entries'
+            on_release: root.go_to_add_entry()
+            canvas.before:
+                Color:
+                    rgba: (0.45, 0.20, 0.05, 1) if self.state == 'down' else (0.55, 0.27, 0.07, 1)
+                Ellipse:
+                    size: self.size
+                    pos: self.pos
+
+# ── Add Entry Screen ──────────────────────────────────────────────────────────
+
+<TopicChip>:
+    size_hint: None, None
+    height: "28dp"
+    width: self.minimum_width
+    padding: "10dp", 0
+    canvas.before:
+        Color:
+            rgba: 0.83, 0.58, 0.42, 0.25
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [14]
+    Label:
+        text: root.topic_name
+        font_size: "12sp"
+        color: 0.55, 0.27, 0.07, 1
+        size_hint: None, None
+        width: self.texture_size[0]
+        height: "28dp"
+
+<AddEntryScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.96, 0.94, 0.91, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: "vertical"
+        size: root.size
+        pos: root.pos
+
+        # ── HEADER ────────────────────────────────────────────────────────────
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: "52dp"
+            padding: "8dp"
+            spacing: "4dp"
+            canvas.before:
+                Color:
+                    rgba: 0.55, 0.27, 0.07, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            Button:
+                text: "←"
+                size_hint: None, None
+                size: "44dp", "36dp"
+                font_size: "20sp"
+                color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                background_normal: ""
+                background_down: ""
+                on_release: root.go_back()
+            ScreenTitle:
+                text: "New Entry"
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+            Widget:
+                size_hint: None, None
+                size: "44dp", "36dp"
+
+        # ── SCROLLABLE CONTENT ────────────────────────────────────────────────
+        ScrollView:
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: "16dp"
+                spacing: "10dp"
+
+                # Entry type selector
+                FieldLabel:
+                    text: "Entry type"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: "52dp"
+                    spacing: "8dp"
+
+                    Button:
+                        text: "Quote"
+                        font_size: "14sp"
+                        bold: True
+                        on_release: root.select_type("quote")
+                        color: (1,1,1,1) if root.entry_type=='quote' else (0.17,0.17,0.17,1)
+                        background_color: 0,0,0,0
+                        background_normal: ""
+                        background_down: ""
+                        canvas.before:
+                            Color:
+                                rgba: (0.83,0.58,0.42,1) if root.entry_type=='quote' else (0.85,0.83,0.78,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [8]
+
+                    Button:
+                        text: "Note"
+                        font_size: "14sp"
+                        bold: True
+                        on_release: root.select_type("note")
+                        color: (1,1,1,1) if root.entry_type=='note' else (0.17,0.17,0.17,1)
+                        background_color: 0,0,0,0
+                        background_normal: ""
+                        background_down: ""
+                        canvas.before:
+                            Color:
+                                rgba: (0.42,0.56,0.62,1) if root.entry_type=='note' else (0.85,0.83,0.78,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [8]
+
+                    Button:
+                        text: "Fact"
+                        font_size: "14sp"
+                        bold: True
+                        on_release: root.select_type("fact")
+                        color: (1,1,1,1) if root.entry_type=='fact' else (0.17,0.17,0.17,1)
+                        background_color: 0,0,0,0
+                        background_normal: ""
+                        background_down: ""
+                        canvas.before:
+                            Color:
+                                rgba: (0.48,0.62,0.49,1) if root.entry_type=='fact' else (0.85,0.83,0.78,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [8]
+
+                # Text input
+                FieldLabel:
+                    text: ("Quote" if root.entry_type == 'quote' else ("Fact" if root.entry_type == 'fact' else "Note"))
+
+                TextInput:
+                    id: text_input
+                    hint_text: ("Enter the quote exactly as written..." if root.entry_type == 'quote' else ("State the fact or assertion..." if root.entry_type == 'fact' else "Write your thought or observation..."))
+                    multiline: True
+                    size_hint_y: None
+                    height: "168dp"
+                    background_color: 0.93, 0.91, 0.87, 1
+                    foreground_color: 0.17, 0.17, 0.17, 1
+                    cursor_color: 0.55, 0.27, 0.07, 1
+                    padding: "12dp", "10dp"
+                    on_text: root.entry_text = self.text
+
+                # "Add Details" divider toggle
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: "36dp"
+                    spacing: "8dp"
+                    Widget:
+                        size_hint_x: 1
+                        canvas.before:
+                            Color:
+                                rgba: 0.85, 0.83, 0.78, 1
+                            Rectangle:
+                                pos: self.x, self.center_y
+                                size: self.width, 1
+                    Button:
+                        text: ("▴ Details" if root.details_expanded else "▾ Details")
+                        size_hint: None, None
+                        size: "96dp", "28dp"
+                        font_size: "12sp"
+                        color: 0.55, 0.27, 0.07, 1
+                        background_color: 0,0,0,0
+                        background_normal: ""
+                        background_down: ""
+                        on_release: root.toggle_details()
+                        canvas.before:
+                            Color:
+                                rgba: 0.85, 0.83, 0.78, 1
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [14]
+                    Widget:
+                        size_hint_x: 1
+                        canvas.before:
+                            Color:
+                                rgba: 0.85, 0.83, 0.78, 1
+                            Rectangle:
+                                pos: self.x, self.center_y
+                                size: self.width, 1
+
+                # ── Collapsible details ────────────────────────────────────────
+                BoxLayout:
+                    id: details_section
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height if root.details_expanded else 0
+                    opacity: 1 if root.details_expanded else 0
+                    disabled: not root.details_expanded
+                    spacing: "8dp"
+
+                    FieldLabel:
+                        text: "Page number"
+
+                    TextInput:
+                        id: page_input
+                        hint_text: "e.g. 127"
+                        size_hint_y: None
+                        height: "44dp"
+                        multiline: False
+                        input_filter: "int"
+                        background_color: 0.93, 0.91, 0.87, 1
+                        foreground_color: 0.17, 0.17, 0.17, 1
+                        cursor_color: 0.55, 0.27, 0.07, 1
+                        padding: "12dp", "10dp"
+
+                    FieldLabel:
+                        text: "Topics (comma separated)"
+
+                    TextInput:
+                        id: topics_input
+                        hint_text: "e.g. philosophy, stoicism"
+                        size_hint_y: None
+                        height: "44dp"
+                        multiline: False
+                        background_color: 0.93, 0.91, 0.87, 1
+                        foreground_color: 0.17, 0.17, 0.17, 1
+                        cursor_color: 0.55, 0.27, 0.07, 1
+                        padding: "12dp", "10dp"
+
+                    # Topic chips (previously used topics)
+                    ScrollView:
+                        do_scroll_y: False
+                        size_hint_y: None
+                        height: "36dp"
+                        BoxLayout:
+                            id: topic_chips
+                            orientation: "horizontal"
+                            size_hint_x: None
+                            width: self.minimum_width
+                            spacing: "6dp"
+                            padding: 0, "4dp"
+
+                    # Importance stars
+                    BoxLayout:
+                        orientation: "horizontal"
+                        size_hint_y: None
+                        height: "44dp"
+                        spacing: "4dp"
+                        FieldLabel:
+                            text: "Importance"
+                            size_hint_x: None
+                            width: "96dp"
+                            height: "44dp"
+                            valign: "middle"
+                        Button:
+                            text: "★"
+                            font_size: "22sp"
+                            size_hint_x: None
+                            width: "44dp"
+                            on_release: root.set_importance(1)
+                            color: (0.55,0.27,0.07,1) if root.importance >= 1 else (0.85,0.83,0.78,1)
+                            background_color: 0,0,0,0
+                            background_normal: ""
+                            background_down: ""
+                        Button:
+                            text: "★"
+                            font_size: "22sp"
+                            size_hint_x: None
+                            width: "44dp"
+                            on_release: root.set_importance(2)
+                            color: (0.55,0.27,0.07,1) if root.importance >= 2 else (0.85,0.83,0.78,1)
+                            background_color: 0,0,0,0
+                            background_normal: ""
+                            background_down: ""
+                        Button:
+                            text: "★"
+                            font_size: "22sp"
+                            size_hint_x: None
+                            width: "44dp"
+                            on_release: root.set_importance(3)
+                            color: (0.55,0.27,0.07,1) if root.importance >= 3 else (0.85,0.83,0.78,1)
+                            background_color: 0,0,0,0
+                            background_normal: ""
+                            background_down: ""
+                        Widget:
+
+                    # Key takeaway toggle
+                    Button:
+                        text: "★  Key Takeaway" if root.is_key_takeaway else "☆  Key Takeaway"
+                        size_hint_y: None
+                        height: "44dp"
+                        font_size: "14sp"
+                        on_release: root.toggle_key_takeaway()
+                        color: (1,1,1,1) if root.is_key_takeaway else (0.55,0.27,0.07,1)
+                        background_color: 0,0,0,0
+                        background_normal: ""
+                        background_down: ""
+                        canvas.before:
+                            Color:
+                                rgba: (0.55,0.27,0.07,1) if root.is_key_takeaway else (0.85,0.83,0.78,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [6]
+
+                    Widget:
+                        size_hint_y: None
+                        height: "4dp"
+
+        # ── SAVE BUTTON (fixed, always visible) ───────────────────────────────
+        BoxLayout:
+            size_hint_y: None
+            height: "64dp"
+            padding: "16dp", "10dp"
+            canvas.before:
+                Color:
+                    rgba: 0.96, 0.94, 0.91, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            PrimaryButton:
+                text: "Save Entry"
+                disabled: not (bool(root.entry_text) and bool(root.entry_type))
+                on_release: root.save_entry()
