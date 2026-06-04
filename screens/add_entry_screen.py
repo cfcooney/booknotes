@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+import threading
+
+from kivy.clock import Clock
 from kivy.properties import BooleanProperty, NumericProperty, StringProperty
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.image import Image as KivyImage
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from sqlalchemy import select
 
@@ -20,6 +25,10 @@ class TopicChip(ButtonBehavior, BoxLayout):
     topic_name = StringProperty("")
 
 
+class ThumbnailImage(ButtonBehavior, KivyImage):
+    pass
+
+
 class AddEntryScreen(Screen):
     book_id = NumericProperty(0)
     entry_type = StringProperty("note")
@@ -27,6 +36,9 @@ class AddEntryScreen(Screen):
     details_expanded = BooleanProperty(False)
     importance = NumericProperty(0)  # 0=unset, 1/2/3
     is_key_takeaway = BooleanProperty(False)
+    captured_image_path = StringProperty("")
+    ocr_loading = BooleanProperty(False)
+    ocr_error_message = StringProperty("")
 
     def on_enter(self, *_) -> None:
         self._reset_form()
@@ -38,6 +50,9 @@ class AddEntryScreen(Screen):
         self.details_expanded = False
         self.importance = 0
         self.is_key_takeaway = False
+        self.captured_image_path = ""
+        self.ocr_loading = False
+        self.ocr_error_message = ""
         ids = self.ids
         ids.text_input.text = ""
         ids.page_input.text = ""
@@ -78,6 +93,51 @@ class AddEntryScreen(Screen):
         if name not in existing:
             existing.append(name)
             self.ids.topics_input.text = ", ".join(existing)
+
+    # ── Camera / OCR ──────────────────────────────────────────────────────────
+
+    def start_capture(self) -> None:
+        from services.image_source import get_image
+
+        get_image(self._on_image_selected)
+
+    def _on_image_selected(self, path: str | None) -> None:
+        if path is None:
+            return
+        self.ocr_loading = True
+        threading.Thread(target=self._run_ocr, args=(path,), daemon=True).start()
+
+    def _run_ocr(self, path: str) -> None:
+        from services.ocr import extract_text_from_image
+
+        result = extract_text_from_image(path)
+        Clock.schedule_once(lambda dt: self._on_ocr_complete(path, result))
+
+    def _on_ocr_complete(self, path: str, result: str | None) -> None:
+        self.ocr_loading = False
+        if result:
+            self.captured_image_path = path
+            self.ids.text_input.text = result
+            self.ids.content_scroll.scroll_to(self.ids.text_input)
+            self.ids.text_input.focus = True
+        else:
+            self.ocr_error_message = (
+                "Could not extract text — try again or type manually"
+            )
+            Clock.schedule_once(lambda dt: setattr(self, "ocr_error_message", ""), 3)
+
+    def show_full_image(self) -> None:
+        if not self.captured_image_path:
+            return
+        Popup(
+            title="",
+            content=KivyImage(source=self.captured_image_path, fit_mode="contain"),
+            size_hint=(0.95, 0.95),
+        ).open()
+
+    def discard_image(self) -> None:
+        self.captured_image_path = ""
+        self.ids.text_input.text = ""
 
     # ── Save ──────────────────────────────────────────────────────────────────
 

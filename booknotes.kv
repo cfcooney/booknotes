@@ -1,6 +1,7 @@
 #:kivy 2.3.1
 #:include theme.kv
 #:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import dp kivy.metrics.dp
 
 <BookCard>:
     orientation: "horizontal"
@@ -1404,6 +1405,7 @@
 
         # ── SCROLLABLE CONTENT ────────────────────────────────────────────────
         ScrollView:
+            id: content_scroll
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
@@ -1476,17 +1478,105 @@
                 FieldLabel:
                     text: ("Quote" if root.entry_type == 'quote' else ("Fact" if root.entry_type == 'fact' else "Note"))
 
-                TextInput:
-                    id: text_input
-                    hint_text: ("Enter the quote exactly as written..." if root.entry_type == 'quote' else ("State the fact or assertion..." if root.entry_type == 'fact' else "Write your thought or observation..."))
-                    multiline: True
+                # ── Thumbnail (shown after successful OCR) ────────────────
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(96) if root.captured_image_path else 0
+                    opacity: 1 if root.captured_image_path else 0
+                    spacing: "12dp"
+                    RelativeLayout:
+                        size_hint: None, None
+                        size: "60dp", "80dp"
+                        ThumbnailImage:
+                            source: root.captured_image_path
+                            size_hint: 1, 1
+                            fit_mode: "contain"
+                            on_release: root.show_full_image()
+                        Button:
+                            text: "✕"
+                            size_hint: None, None
+                            size: "20dp", "20dp"
+                            pos_hint: {"right": 1, "top": 1}
+                            font_size: "10sp"
+                            color: 1, 1, 1, 1
+                            background_color: 0, 0, 0, 0
+                            background_normal: ""
+                            background_down: ""
+                            on_release: root.discard_image()
+                            canvas.before:
+                                Color:
+                                    rgba: 0.55, 0.27, 0.07, 1
+                                Ellipse:
+                                    size: self.size
+                                    pos: self.pos
+                    Widget:
+
+                # ── Text input + camera button ────────────────────────────
+                BoxLayout:
+                    orientation: "horizontal"
                     size_hint_y: None
                     height: "168dp"
-                    background_color: 0.93, 0.91, 0.87, 1
-                    foreground_color: 0.17, 0.17, 0.17, 1
-                    cursor_color: 0.55, 0.27, 0.07, 1
-                    padding: "12dp", "10dp"
-                    on_text: root.entry_text = self.text
+                    spacing: dp(8) if root.entry_type == 'quote' else 0
+                    FloatLayout:
+                        TextInput:
+                            id: text_input
+                            hint_text: ("Enter the quote exactly as written..." if root.entry_type == 'quote' else ("State the fact or assertion..." if root.entry_type == 'fact' else "Write your thought or observation..."))
+                            multiline: True
+                            size_hint: 1, 1
+                            pos_hint: {"x": 0, "y": 0}
+                            background_color: 0.93, 0.91, 0.87, 1
+                            foreground_color: 0.17, 0.17, 0.17, 1
+                            cursor_color: 0.55, 0.27, 0.07, 1
+                            padding: "12dp", "10dp"
+                            on_text: root.entry_text = self.text
+                        BoxLayout:
+                            id: loading_overlay
+                            size_hint: 1, 1
+                            pos_hint: {"x": 0, "y": 0}
+                            opacity: 1 if root.ocr_loading else 0
+                            disabled: not root.ocr_loading
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, 0.45
+                                Rectangle:
+                                    size: self.size
+                                    pos: self.pos
+                            Label:
+                                text: "Extracting text..."
+                                color: 1, 1, 1, 1
+                                font_size: "14sp"
+                                halign: "center"
+                                valign: "middle"
+                                text_size: self.size
+                    Button:
+                        size_hint_x: None
+                        width: dp(52) if root.entry_type == 'quote' else 0
+                        text: "📷"
+                        font_size: "22sp"
+                        color: 1, 1, 1, 1
+                        background_color: 0, 0, 0, 0
+                        background_normal: ""
+                        background_down: ""
+                        on_release: root.start_capture()
+                        canvas.before:
+                            Color:
+                                rgba: (0.45,0.20,0.05,1) if self.state=='down' else (0.83,0.58,0.42,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [6]
+
+                # ── OCR error message ─────────────────────────────────────
+                Label:
+                    text: root.ocr_error_message
+                    size_hint_y: None
+                    height: "20dp" if root.ocr_error_message else 0
+                    opacity: 1 if root.ocr_error_message else 0
+                    color: 0.75, 0.22, 0.17, 1
+                    font_size: "12sp"
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.width, None
 
                 # "Add Details" divider toggle
                 BoxLayout:
