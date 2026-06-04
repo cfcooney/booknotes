@@ -12,3 +12,9 @@ wheels/
 # Local configuration and generated DB
 .env
 *.db
+
+# temp files
+*.txt
+*.jpg
+smoke_test.py
+test_ocr.py

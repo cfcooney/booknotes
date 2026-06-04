@@ -4,7 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Context
 
-Standalone desktop app for **capturing notes while reading books** — quotes, facts, plot-points, character knowledge. Desktop prototype (Python/Kivy), Android target later.
+Standalone app for **capturing notes while reading books** — quotes, facts, plot-points, character knowledge.
+
+**Primary language: Python.** No JavaScript, no cross-platform runtimes beyond Kivy.
+
+**Ultimate target: Android mobile.** The desktop build is an MVP vehicle only. Every architectural decision should be made with Android deployment in mind:
+- Keep UI logic in Python/KV, not platform-specific extensions.
+- Avoid desktop-only libraries or OS APIs that won't port (e.g. no `win32`, no `tkinter`, no `subprocess` for UI work).
+- Touch targets, layout proportions, and navigation patterns should suit a phone screen even while prototyping on desktop.
+- Buildozer + python-for-android (p4a) will be the packaging route. Dependencies added to `pyproject.toml` must have a p4a recipe or be pure-Python.
+
+When a significant amount of Android-specific build/packaging guidance accumulates, create a local skill at `.claude/skills/android-build/` to capture it.
 
 ## Stack
 - UI: Kivy 2.3.1
@@ -75,3 +85,9 @@ def session():
 ```
 
 pytest is not yet in `pyproject.toml` — add with `uv add --dev pytest`.
+
+
+## Skills
+- UI work (any .kv file or screen): use ~/.claude/skills/kivy-ui-design/SKILL.md
+- Environment setup: use ~/.claude/skills/uv-python-setup/SKILL.md
+- General coding principlesL use ~/.claude/skills/karpathy-guidelines

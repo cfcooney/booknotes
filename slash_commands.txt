@@ -1,0 +1,8 @@
+/clear -> Hard-resets the active conversation context entirely while keeping the project's memory intact.
+/context -> Generates a real-time visualization of your token consumption window.
+/cost
+/memory
+/init -> 
+/model -> View or switch the active AI model mid-session.
+/rewind -> Opens the auto-checkpoint menu to roll your code and/or conversation back to an earlier state.
+/agents -> For huge, overarching tasks, this allows Claude to spin up parallel background agents, giving them separate, isolated subtasks to work on at the exact same time.

@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
 
