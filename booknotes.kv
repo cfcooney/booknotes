@@ -11,7 +11,7 @@
     spacing: "12dp"
     canvas.before:
         Color:
-            rgba: 0.93, 0.91, 0.87, 1
+            rgba: 0.937, 0.925, 0.902, 1
         RoundedRectangle:
             size: self.size
             pos: self.pos
@@ -23,7 +23,7 @@
         width: "60dp"
         canvas.before:
             Color:
-                rgba: 0.85, 0.83, 0.78, 1
+                rgba: 0.87, 0.85, 0.82, 1
             RoundedRectangle:
                 size: self.size
                 pos: self.pos
@@ -43,7 +43,7 @@
             text: root.title_text
             font_size: "16sp"
             bold: True
-            color: 0.17, 0.17, 0.17, 1
+            color: 0.133, 0.145, 0.165, 1
             halign: "left"
             valign: "middle"
             text_size: self.width, None
@@ -64,7 +64,7 @@
         Label:
             text: root.genre_text
             font_size: "11sp"
-            color: 0.55, 0.27, 0.07, 1
+            color: 0.239, 0.420, 0.341, 1
             halign: "left"
             valign: "middle"
             text_size: None, None
@@ -74,7 +74,7 @@
             opacity: 1 if root.genre_text else 0
             canvas.before:
                 Color:
-                    rgba: 0.83, 0.58, 0.42, 0.2
+                    rgba: 0.420, 0.620, 0.525, 0.2
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
@@ -123,7 +123,7 @@
 <HomeScreen>:
     canvas.before:
         Color:
-            rgba: 0.96, 0.94, 0.91, 1
+            rgba: 0.976, 0.965, 0.941, 1
         Rectangle:
             size: self.size
             pos: self.pos
@@ -141,7 +141,7 @@
             spacing: "8dp"
             canvas.before:
                 Color:
-                    rgba: 0.55, 0.27, 0.07, 1
+                    rgba: 0.239, 0.420, 0.341, 1
                 Rectangle:
                     size: self.size
                     pos: self.pos
@@ -155,14 +155,14 @@
                 size_hint: None, None
                 size: "110dp", "36dp"
                 font_size: "13sp"
-                color: 0.55, 0.27, 0.07, 1
+                color: 0.239, 0.420, 0.341, 1
                 background_color: 0, 0, 0, 0
                 background_normal: ""
                 background_down: ""
                 on_release: root.go_to_add_book()
                 canvas.before:
                     Color:
-                        rgba: (0.85, 0.83, 0.78, 1) if self.state == 'down' else (0.96, 0.94, 0.91, 1)
+                        rgba: (0.87, 0.85, 0.82, 1) if self.state == 'down' else (0.976, 0.965, 0.941, 1)
                     RoundedRectangle:
                         size: self.size
                         pos: self.pos
@@ -175,7 +175,7 @@
             height: "44dp"
             canvas.before:
                 Color:
-                    rgba: 0.93, 0.91, 0.87, 1
+                    rgba: 0.937, 0.925, 0.902, 1
                 Rectangle:
                     size: self.size
                     pos: self.pos
@@ -183,13 +183,13 @@
                 text: "Currently Reading"
                 font_size: "13sp"
                 on_release: root.switch_tab("reading")
-                color: (1, 1, 1, 1) if root.active_tab == 'reading' else (0.55, 0.27, 0.07, 1)
+                color: (1, 1, 1, 1) if root.active_tab == 'reading' else (0.239, 0.420, 0.341, 1)
                 background_color: 0, 0, 0, 0
                 background_normal: ""
                 background_down: ""
                 canvas.before:
                     Color:
-                        rgba: (0.55, 0.27, 0.07, 1) if root.active_tab == 'reading' else (0.93, 0.91, 0.87, 1)
+                        rgba: (0.239, 0.420, 0.341, 1) if root.active_tab == 'reading' else (0.937, 0.925, 0.902, 1)
                     Rectangle:
                         size: self.size
                         pos: self.pos
@@ -197,13 +197,13 @@
                 text: "All Books"
                 font_size: "13sp"
                 on_release: root.switch_tab("all")
-                color: (1, 1, 1, 1) if root.active_tab == 'all' else (0.55, 0.27, 0.07, 1)
+                color: (1, 1, 1, 1) if root.active_tab == 'all' else (0.239, 0.420, 0.341, 1)
                 background_color: 0, 0, 0, 0
                 background_normal: ""
                 background_down: ""
                 canvas.before:
                     Color:
-                        rgba: (0.55, 0.27, 0.07, 1) if root.active_tab == 'all' else (0.93, 0.91, 0.87, 1)
+                        rgba: (0.239, 0.420, 0.341, 1) if root.active_tab == 'all' else (0.937, 0.925, 0.902, 1)
                     Rectangle:
                         size: self.size
                         pos: self.pos
@@ -221,7 +221,7 @@
 <AddBookScreen>:
     canvas.before:
         Color:
-            rgba: 0.96, 0.94, 0.91, 1
+            rgba: 0.976, 0.965, 0.941, 1
         Rectangle:
             size: self.size
             pos: self.pos
@@ -237,7 +237,7 @@
             spacing: "4dp"
             canvas.before:
                 Color:
-                    rgba: 0.55, 0.27, 0.07, 1
+                    rgba: 0.239, 0.420, 0.341, 1
                 Rectangle:
                     size: self.size
                     pos: self.pos
@@ -308,13 +308,13 @@
                                 id: fiction_btn
                                 text: "Fiction"
                                 on_press: root.select_fiction("fiction")
-                                color: (1, 1, 1, 1) if root.fiction_selected == 'fiction' else (0.17, 0.17, 0.17, 1)
+                                color: (1, 1, 1, 1) if root.fiction_selected == 'fiction' else (0.133, 0.145, 0.165, 1)
                                 background_color: 0, 0, 0, 0
                                 background_normal: ""
                                 background_down: ""
                                 canvas.before:
                                     Color:
-                                        rgba: (0.55, 0.27, 0.07, 1) if root.fiction_selected == 'fiction' else (0.93, 0.91, 0.87, 1)
+                                        rgba: (0.239, 0.420, 0.341, 1) if root.fiction_selected == 'fiction' else (0.937, 0.925, 0.902, 1)
                                     RoundedRectangle:
                                         size: self.size
                                         pos: self.pos
@@ -323,13 +323,13 @@
                                 id: nonfiction_btn
                                 text: "Non-Fiction"
                                 on_press: root.select_fiction("nonfiction")
-                                color: (1, 1, 1, 1) if root.fiction_selected == 'nonfiction' else (0.17, 0.17, 0.17, 1)
+                                color: (1, 1, 1, 1) if root.fiction_selected == 'nonfiction' else (0.133, 0.145, 0.165, 1)
                                 background_color: 0, 0, 0, 0
                                 background_normal: ""
                                 background_down: ""
                                 canvas.before:
                                     Color:
-                                        rgba: (0.55, 0.27, 0.07, 1) if root.fiction_selected == 'nonfiction' else (0.93, 0.91, 0.87, 1)
+                                        rgba: (0.239, 0.420, 0.341, 1) if root.fiction_selected == 'nonfiction' else (0.937, 0.925, 0.902, 1)
                                     RoundedRectangle:
                                         size: self.size
                                         pos: self.pos
@@ -344,7 +344,7 @@
                             Widget:
                                 canvas.before:
                                     Color:
-                                        rgba: 0.85, 0.83, 0.78, 1
+                                        rgba: 0.87, 0.85, 0.82, 1
                                     Rectangle:
                                         pos: self.x, self.center_y
                                         size: self.width, 1
@@ -357,7 +357,7 @@
                             Widget:
                                 canvas.before:
                                     Color:
-                                        rgba: 0.85, 0.83, 0.78, 1
+                                        rgba: 0.87, 0.85, 0.82, 1
                                     Rectangle:
                                         pos: self.x, self.center_y
                                         size: self.width, 1
@@ -370,14 +370,14 @@
                             values: root.GENRES
                             size_hint_y: None
                             height: "44dp"
-                            color: 0.17, 0.17, 0.17, 1
+                            color: 0.133, 0.145, 0.165, 1
                             background_normal: ""
                             background_down: ""
                             background_color: 0, 0, 0, 0
                             on_text: root.genre_text = self.text
                             canvas.before:
                                 Color:
-                                    rgba: 0.93, 0.91, 0.87, 1
+                                    rgba: 0.937, 0.925, 0.902, 1
                                 RoundedRectangle:
                                     size: self.size
                                     pos: self.pos
@@ -409,14 +409,14 @@
                                 disabled: not root.title_text or not root.author_text or root.fetching
                                 size_hint_x: 0.55
                                 font_size: "13sp"
-                                color: (0.42, 0.40, 0.38, 1) if self.disabled else (0.55, 0.27, 0.07, 1)
+                                color: (0.42, 0.40, 0.38, 1) if self.disabled else (0.239, 0.420, 0.341, 1)
                                 background_color: 0, 0, 0, 0
                                 background_normal: ""
                                 background_down: ""
                                 on_release: root.fetch_metadata()
                                 canvas.before:
                                     Color:
-                                        rgba: 0.85, 0.83, 0.78, 1
+                                        rgba: 0.87, 0.85, 0.82, 1
                                     RoundedRectangle:
                                         size: self.size
                                         pos: self.pos
@@ -424,7 +424,7 @@
                             Label:
                                 text: root.fetch_status
                                 font_size: "12sp"
-                                color: 0.83, 0.58, 0.42, 1
+                                color: 0.420, 0.620, 0.525, 1
                                 halign: "left"
                                 valign: "middle"
                                 text_size: self.size
@@ -462,7 +462,7 @@
                             text: "Book found on Open Library"
                             font_size: "14sp"
                             bold: True
-                            color: 0.17, 0.17, 0.17, 1
+                            color: 0.133, 0.145, 0.165, 1
                             halign: "left"
                             valign: "middle"
                             size_hint_y: None
@@ -478,7 +478,7 @@
                             spacing: "12dp"
                             canvas.before:
                                 Color:
-                                    rgba: 0.93, 0.91, 0.87, 1
+                                    rgba: 0.937, 0.925, 0.902, 1
                                 RoundedRectangle:
                                     size: self.size
                                     pos: self.pos
@@ -490,7 +490,7 @@
                                 width: "90dp"
                                 canvas.before:
                                     Color:
-                                        rgba: 0.85, 0.83, 0.78, 1
+                                        rgba: 0.87, 0.85, 0.82, 1
                                     RoundedRectangle:
                                         size: self.size
                                         pos: self.pos
@@ -510,7 +510,7 @@
                                     text: ""
                                     font_size: "15sp"
                                     bold: True
-                                    color: 0.17, 0.17, 0.17, 1
+                                    color: 0.133, 0.145, 0.165, 1
                                     halign: "left"
                                     valign: "top"
                                     text_size: self.width, None
@@ -540,7 +540,7 @@
                                     id: preview_genre
                                     text: ""
                                     font_size: "12sp"
-                                    color: 0.55, 0.27, 0.07, 1
+                                    color: 0.239, 0.420, 0.341, 1
                                     halign: "left"
                                     valign: "top"
                                     text_size: self.width, None
@@ -565,7 +565,7 @@
     padding: "16dp", "6dp"
     canvas.before:
         Color:
-            rgba: 0.85, 0.83, 0.78, 1
+            rgba: 0.87, 0.85, 0.82, 1
         Rectangle:
             size: self.size
             pos: self.pos
@@ -586,7 +586,7 @@
     spacing: "4dp"
     canvas.before:
         Color:
-            rgba: 0.93, 0.91, 0.87, 1
+            rgba: 0.937, 0.925, 0.902, 1
         RoundedRectangle:
             size: self.size
             pos: self.pos
@@ -595,7 +595,7 @@
         text: root.name_text
         font_size: "15sp"
         bold: True
-        color: 0.17, 0.17, 0.17, 1
+        color: 0.133, 0.145, 0.165, 1
         halign: "left"
         valign: "top"
         text_size: self.width, None
@@ -620,7 +620,7 @@
     spacing: "4dp"
     canvas.before:
         Color:
-            rgba: 0.93, 0.91, 0.87, 1
+            rgba: 0.937, 0.925, 0.902, 1
         RoundedRectangle:
             size: self.size
             pos: self.pos
@@ -651,7 +651,7 @@
         Label:
             text: "★" if root.is_key_takeaway else "☆"
             font_size: "14sp"
-            color: (0.55, 0.27, 0.07, 1) if root.is_key_takeaway else (0.85, 0.83, 0.78, 1)
+            color: (0.239, 0.420, 0.341, 1) if root.is_key_takeaway else (0.87, 0.85, 0.82, 1)
             size_hint: None, None
             size: "20dp", "20dp"
         Widget:
@@ -669,7 +669,7 @@
     Label:
         text: root.text_preview
         font_size: "14sp"
-        color: 0.17, 0.17, 0.17, 1
+        color: 0.133, 0.145, 0.165, 1
         halign: "left"
         valign: "top"
         text_size: self.width, None
@@ -685,7 +685,7 @@
         Label:
             text: root.topic_text
             font_size: "11sp"
-            color: 0.55, 0.27, 0.07, 1
+            color: 0.239, 0.420, 0.341, 1
             halign: "left"
             valign: "middle"
             text_size: self.size
@@ -731,7 +731,7 @@
 <BookScreen>:
     canvas.before:
         Color:
-            rgba: 0.96, 0.94, 0.91, 1
+            rgba: 0.976, 0.965, 0.941, 1
         Rectangle:
             size: self.size
             pos: self.pos
@@ -751,7 +751,7 @@
                 height: dp(52) + (dp(24) if root.show_progress else 0)
                 canvas.before:
                     Color:
-                        rgba: 0.55, 0.27, 0.07, 1
+                        rgba: 0.239, 0.420, 0.341, 1
                     Rectangle:
                         size: self.size
                         pos: self.pos
@@ -779,7 +779,7 @@
                         size: "36dp", "44dp"
                         canvas.before:
                             Color:
-                                rgba: 0.45, 0.20, 0.05, 1
+                                rgba: 0.176, 0.314, 0.251, 1
                             RoundedRectangle:
                                 size: self.size
                                 pos: self.pos
@@ -812,14 +812,14 @@
                         text: root.status_label
                         font_size: "11sp"
                         bold: True
-                        color: 0.55, 0.27, 0.07, 1
+                        color: 0.239, 0.420, 0.341, 1
                         size_hint: None, None
                         size: self.texture_size[0] + dp(14), "24dp"
                         halign: "center"
                         valign: "middle"
                         canvas.before:
                             Color:
-                                rgba: 0.96, 0.94, 0.91, 1
+                                rgba: 0.976, 0.965, 0.941, 1
                             RoundedRectangle:
                                 size: self.size
                                 pos: self.pos
@@ -864,7 +864,7 @@
                 height: "44dp"
                 canvas.before:
                     Color:
-                        rgba: 0.93, 0.91, 0.87, 1
+                        rgba: 0.937, 0.925, 0.902, 1
                     Rectangle:
                         size: self.size
                         pos: self.pos
@@ -872,13 +872,13 @@
                     text: "Entries"
                     font_size: "13sp"
                     on_release: root.switch_tab("entries")
-                    color: (1,1,1,1) if root.active_tab=='entries' else (0.55,0.27,0.07,1)
+                    color: (1,1,1,1) if root.active_tab=='entries' else (0.239,0.420,0.341,1)
                     background_color: 0, 0, 0, 0
                     background_normal: ""
                     background_down: ""
                     canvas.before:
                         Color:
-                            rgba: (0.55,0.27,0.07,1) if root.active_tab=='entries' else (0.93,0.91,0.87,1)
+                            rgba: (0.239,0.420,0.341,1) if root.active_tab=='entries' else (0.937,0.925,0.902,1)
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -886,13 +886,13 @@
                     text: "Characters"
                     font_size: "13sp"
                     on_release: root.switch_tab("characters")
-                    color: (1,1,1,1) if root.active_tab=='characters' else (0.55,0.27,0.07,1)
+                    color: (1,1,1,1) if root.active_tab=='characters' else (0.239,0.420,0.341,1)
                     background_color: 0, 0, 0, 0
                     background_normal: ""
                     background_down: ""
                     canvas.before:
                         Color:
-                            rgba: (0.55,0.27,0.07,1) if root.active_tab=='characters' else (0.93,0.91,0.87,1)
+                            rgba: (0.239,0.420,0.341,1) if root.active_tab=='characters' else (0.937,0.925,0.902,1)
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -900,13 +900,13 @@
                     text: "About"
                     font_size: "13sp"
                     on_release: root.switch_tab("about")
-                    color: (1,1,1,1) if root.active_tab=='about' else (0.55,0.27,0.07,1)
+                    color: (1,1,1,1) if root.active_tab=='about' else (0.239,0.420,0.341,1)
                     background_color: 0, 0, 0, 0
                     background_normal: ""
                     background_down: ""
                     canvas.before:
                         Color:
-                            rgba: (0.55,0.27,0.07,1) if root.active_tab=='about' else (0.93,0.91,0.87,1)
+                            rgba: (0.239,0.420,0.341,1) if root.active_tab=='about' else (0.937,0.925,0.902,1)
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -927,7 +927,7 @@
                             height: "44dp"
                             canvas.before:
                                 Color:
-                                    rgba: 0.96, 0.94, 0.91, 1
+                                    rgba: 0.976, 0.965, 0.941, 1
                                 Rectangle:
                                     size: self.size
                                     pos: self.pos
@@ -945,13 +945,13 @@
                                         size: self.texture_size[0] + dp(16), "28dp"
                                         font_size: "12sp"
                                         on_release: root.set_filter("all")
-                                        color: (1,1,1,1) if root.active_filter=='all' else (0.55,0.27,0.07,1)
+                                        color: (1,1,1,1) if root.active_filter=='all' else (0.239,0.420,0.341,1)
                                         background_color: 0,0,0,0
                                         background_normal: ""
                                         background_down: ""
                                         canvas.before:
                                             Color:
-                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='all' else (0.85,0.83,0.78,1)
+                                                rgba: (0.239,0.420,0.341,1) if root.active_filter=='all' else (0.85,0.83,0.78,1)
                                             RoundedRectangle:
                                                 size: self.size
                                                 pos: self.pos
@@ -962,13 +962,13 @@
                                         size: self.texture_size[0] + dp(16), "28dp"
                                         font_size: "12sp"
                                         on_release: root.set_filter("quote")
-                                        color: (1,1,1,1) if root.active_filter=='quote' else (0.55,0.27,0.07,1)
+                                        color: (1,1,1,1) if root.active_filter=='quote' else (0.239,0.420,0.341,1)
                                         background_color: 0,0,0,0
                                         background_normal: ""
                                         background_down: ""
                                         canvas.before:
                                             Color:
-                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='quote' else (0.85,0.83,0.78,1)
+                                                rgba: (0.239,0.420,0.341,1) if root.active_filter=='quote' else (0.85,0.83,0.78,1)
                                             RoundedRectangle:
                                                 size: self.size
                                                 pos: self.pos
@@ -979,13 +979,13 @@
                                         size: self.texture_size[0] + dp(16), "28dp"
                                         font_size: "12sp"
                                         on_release: root.set_filter("note")
-                                        color: (1,1,1,1) if root.active_filter=='note' else (0.55,0.27,0.07,1)
+                                        color: (1,1,1,1) if root.active_filter=='note' else (0.239,0.420,0.341,1)
                                         background_color: 0,0,0,0
                                         background_normal: ""
                                         background_down: ""
                                         canvas.before:
                                             Color:
-                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='note' else (0.85,0.83,0.78,1)
+                                                rgba: (0.239,0.420,0.341,1) if root.active_filter=='note' else (0.85,0.83,0.78,1)
                                             RoundedRectangle:
                                                 size: self.size
                                                 pos: self.pos
@@ -996,13 +996,13 @@
                                         size: self.texture_size[0] + dp(16), "28dp"
                                         font_size: "12sp"
                                         on_release: root.set_filter("fact")
-                                        color: (1,1,1,1) if root.active_filter=='fact' else (0.55,0.27,0.07,1)
+                                        color: (1,1,1,1) if root.active_filter=='fact' else (0.239,0.420,0.341,1)
                                         background_color: 0,0,0,0
                                         background_normal: ""
                                         background_down: ""
                                         canvas.before:
                                             Color:
-                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='fact' else (0.85,0.83,0.78,1)
+                                                rgba: (0.239,0.420,0.341,1) if root.active_filter=='fact' else (0.85,0.83,0.78,1)
                                             RoundedRectangle:
                                                 size: self.size
                                                 pos: self.pos
@@ -1013,13 +1013,13 @@
                                         size: self.texture_size[0] + dp(16), "28dp"
                                         font_size: "12sp"
                                         on_release: root.set_filter("key")
-                                        color: (1,1,1,1) if root.active_filter=='key' else (0.55,0.27,0.07,1)
+                                        color: (1,1,1,1) if root.active_filter=='key' else (0.239,0.420,0.341,1)
                                         background_color: 0,0,0,0
                                         background_normal: ""
                                         background_down: ""
                                         canvas.before:
                                             Color:
-                                                rgba: (0.55,0.27,0.07,1) if root.active_filter=='key' else (0.85,0.83,0.78,1)
+                                                rgba: (0.239,0.420,0.341,1) if root.active_filter=='key' else (0.85,0.83,0.78,1)
                                             RoundedRectangle:
                                                 size: self.size
                                                 pos: self.pos
@@ -1034,13 +1034,13 @@
                                     text: "Journal"
                                     font_size: "11sp"
                                     on_release: root.set_view("journal")
-                                    color: (1,1,1,1) if root.active_view=='journal' else (0.55,0.27,0.07,1)
+                                    color: (1,1,1,1) if root.active_view=='journal' else (0.239,0.420,0.341,1)
                                     background_color: 0,0,0,0
                                     background_normal: ""
                                     background_down: ""
                                     canvas.before:
                                         Color:
-                                            rgba: (0.55,0.27,0.07,1) if root.active_view=='journal' else (0.85,0.83,0.78,1)
+                                            rgba: (0.239,0.420,0.341,1) if root.active_view=='journal' else (0.85,0.83,0.78,1)
                                         RoundedRectangle:
                                             size: self.size
                                             pos: self.pos
@@ -1049,13 +1049,13 @@
                                     text: "Grouped"
                                     font_size: "11sp"
                                     on_release: root.set_view("organised")
-                                    color: (1,1,1,1) if root.active_view=='organised' else (0.55,0.27,0.07,1)
+                                    color: (1,1,1,1) if root.active_view=='organised' else (0.239,0.420,0.341,1)
                                     background_color: 0,0,0,0
                                     background_normal: ""
                                     background_down: ""
                                     canvas.before:
                                         Color:
-                                            rgba: (0.55,0.27,0.07,1) if root.active_view=='organised' else (0.85,0.83,0.78,1)
+                                            rgba: (0.239,0.420,0.341,1) if root.active_view=='organised' else (0.85,0.83,0.78,1)
                                         RoundedRectangle:
                                             size: self.size
                                             pos: self.pos
@@ -1082,7 +1082,7 @@
                             spacing: "8dp"
                             canvas.before:
                                 Color:
-                                    rgba: 0.93, 0.91, 0.87, 1
+                                    rgba: 0.937, 0.925, 0.902, 1
                                 Rectangle:
                                     size: self.size
                                     pos: self.pos
@@ -1092,14 +1092,14 @@
                                 size_hint: None, None
                                 size: "140dp", "32dp"
                                 font_size: "13sp"
-                                color: 0.55, 0.27, 0.07, 1
+                                color: 0.239, 0.420, 0.341, 1
                                 background_color: 0, 0, 0, 0
                                 background_normal: ""
                                 background_down: ""
                                 on_release: root.open_add_character()
                                 canvas.before:
                                     Color:
-                                        rgba: 0.85, 0.83, 0.78, 1
+                                        rgba: 0.87, 0.85, 0.82, 1
                                     RoundedRectangle:
                                         size: self.size
                                         pos: self.pos
@@ -1130,7 +1130,7 @@
                                 pos_hint: {"center_x": 0.5}
                                 canvas.before:
                                     Color:
-                                        rgba: 0.85, 0.83, 0.78, 1
+                                        rgba: 0.87, 0.85, 0.82, 1
                                     RoundedRectangle:
                                         size: self.size
                                         pos: self.pos
@@ -1149,7 +1149,7 @@
                                 padding: "16dp"
                                 canvas.before:
                                     Color:
-                                        rgba: 0.93, 0.91, 0.87, 1
+                                        rgba: 0.937, 0.925, 0.902, 1
                                     RoundedRectangle:
                                         size: self.size
                                         pos: self.pos
@@ -1158,7 +1158,7 @@
                                     text: root.book_title
                                     font_size: "17sp"
                                     bold: True
-                                    color: 0.17, 0.17, 0.17, 1
+                                    color: 0.133, 0.145, 0.165, 1
                                     halign: "left"
                                     valign: "top"
                                     text_size: self.width, None
@@ -1198,7 +1198,7 @@
                                     height: "12dp"
                                     canvas.before:
                                         Color:
-                                            rgba: 0.85, 0.83, 0.78, 1
+                                            rgba: 0.87, 0.85, 0.82, 1
                                         Rectangle:
                                             pos: self.x, self.center_y
                                             size: self.width, 1
@@ -1232,7 +1232,7 @@
                                     padding: "8dp"
                                     canvas.before:
                                         Color:
-                                            rgba: 0.93, 0.91, 0.87, 1
+                                            rgba: 0.937, 0.925, 0.902, 1
                                         RoundedRectangle:
                                             size: self.size
                                             pos: self.pos
@@ -1241,7 +1241,7 @@
                                         text: str(root.about_quote_count)
                                         font_size: "20sp"
                                         bold: True
-                                        color: 0.83, 0.58, 0.42, 1
+                                        color: 0.420, 0.620, 0.525, 1
                                         halign: "center"
                                         valign: "middle"
                                         text_size: self.size
@@ -1257,7 +1257,7 @@
                                     padding: "8dp"
                                     canvas.before:
                                         Color:
-                                            rgba: 0.93, 0.91, 0.87, 1
+                                            rgba: 0.937, 0.925, 0.902, 1
                                         Rectangle:
                                             size: self.size
                                             pos: self.pos
@@ -1281,7 +1281,7 @@
                                     padding: "8dp"
                                     canvas.before:
                                         Color:
-                                            rgba: 0.93, 0.91, 0.87, 1
+                                            rgba: 0.937, 0.925, 0.902, 1
                                         RoundedRectangle:
                                             size: self.size
                                             pos: self.pos
@@ -1332,7 +1332,7 @@
             on_release: root.go_to_add_entry()
             canvas.before:
                 Color:
-                    rgba: (0.45, 0.20, 0.05, 1) if self.state == 'down' else (0.55, 0.27, 0.07, 1)
+                    rgba: (0.176, 0.314, 0.251, 1) if self.state == 'down' else (0.239, 0.420, 0.341, 1)
                 Ellipse:
                     size: self.size
                     pos: self.pos
@@ -1346,7 +1346,7 @@
     padding: "10dp", 0
     canvas.before:
         Color:
-            rgba: 0.83, 0.58, 0.42, 0.25
+            rgba: 0.420, 0.620, 0.525, 0.25
         RoundedRectangle:
             size: self.size
             pos: self.pos
@@ -1354,7 +1354,7 @@
     Label:
         text: root.topic_name
         font_size: "12sp"
-        color: 0.55, 0.27, 0.07, 1
+        color: 0.239, 0.420, 0.341, 1
         size_hint: None, None
         width: self.texture_size[0]
         height: "28dp"
@@ -1362,7 +1362,7 @@
 <AddEntryScreen>:
     canvas.before:
         Color:
-            rgba: 0.96, 0.94, 0.91, 1
+            rgba: 0.976, 0.965, 0.941, 1
         Rectangle:
             size: self.size
             pos: self.pos
@@ -1380,7 +1380,7 @@
             spacing: "4dp"
             canvas.before:
                 Color:
-                    rgba: 0.55, 0.27, 0.07, 1
+                    rgba: 0.239, 0.420, 0.341, 1
                 Rectangle:
                     size: self.size
                     pos: self.pos
@@ -1434,7 +1434,7 @@
                         background_down: ""
                         canvas.before:
                             Color:
-                                rgba: (0.83,0.58,0.42,1) if root.entry_type=='quote' else (0.85,0.83,0.78,1)
+                                rgba: (0.420,0.620,0.525,1) if root.entry_type=='quote' else (0.85,0.83,0.78,1)
                             RoundedRectangle:
                                 size: self.size
                                 pos: self.pos
@@ -1505,7 +1505,7 @@
                             on_release: root.discard_image()
                             canvas.before:
                                 Color:
-                                    rgba: 0.55, 0.27, 0.07, 1
+                                    rgba: 0.239, 0.420, 0.341, 1
                                 Ellipse:
                                     size: self.size
                                     pos: self.pos
@@ -1524,9 +1524,9 @@
                             multiline: True
                             size_hint: 1, 1
                             pos_hint: {"x": 0, "y": 0}
-                            background_color: 0.93, 0.91, 0.87, 1
-                            foreground_color: 0.17, 0.17, 0.17, 1
-                            cursor_color: 0.55, 0.27, 0.07, 1
+                            background_color: 0.937, 0.925, 0.902, 1
+                            foreground_color: 0.133, 0.145, 0.165, 1
+                            cursor_color: 0.239, 0.420, 0.341, 1
                             padding: "12dp", "10dp"
                             on_text: root.entry_text = self.text
                         BoxLayout:
@@ -1562,7 +1562,7 @@
                         on_release: root.start_capture()
                         canvas.before:
                             Color:
-                                rgba: (0.45,0.20,0.05,1) if self.state=='down' else (0.83,0.58,0.42,1)
+                                rgba: (0.176,0.314,0.251,1) if self.state=='down' else (0.420,0.620,0.525,1)
                             RoundedRectangle:
                                 size: self.size
                                 pos: self.pos
@@ -1590,7 +1590,7 @@
                         size_hint_x: 1
                         canvas.before:
                             Color:
-                                rgba: 0.85, 0.83, 0.78, 1
+                                rgba: 0.87, 0.85, 0.82, 1
                             Rectangle:
                                 pos: self.x, self.center_y
                                 size: self.width, 1
@@ -1599,14 +1599,14 @@
                         size_hint: None, None
                         size: "96dp", "28dp"
                         font_size: "12sp"
-                        color: 0.55, 0.27, 0.07, 1
+                        color: 0.239, 0.420, 0.341, 1
                         background_color: 0,0,0,0
                         background_normal: ""
                         background_down: ""
                         on_release: root.toggle_details()
                         canvas.before:
                             Color:
-                                rgba: 0.85, 0.83, 0.78, 1
+                                rgba: 0.87, 0.85, 0.82, 1
                             RoundedRectangle:
                                 size: self.size
                                 pos: self.pos
@@ -1615,7 +1615,7 @@
                         size_hint_x: 1
                         canvas.before:
                             Color:
-                                rgba: 0.85, 0.83, 0.78, 1
+                                rgba: 0.87, 0.85, 0.82, 1
                             Rectangle:
                                 pos: self.x, self.center_y
                                 size: self.width, 1
@@ -1640,9 +1640,9 @@
                         height: "44dp"
                         multiline: False
                         input_filter: "int"
-                        background_color: 0.93, 0.91, 0.87, 1
-                        foreground_color: 0.17, 0.17, 0.17, 1
-                        cursor_color: 0.55, 0.27, 0.07, 1
+                        background_color: 0.937, 0.925, 0.902, 1
+                        foreground_color: 0.133, 0.145, 0.165, 1
+                        cursor_color: 0.239, 0.420, 0.341, 1
                         padding: "12dp", "10dp"
 
                     FieldLabel:
@@ -1654,9 +1654,9 @@
                         size_hint_y: None
                         height: "44dp"
                         multiline: False
-                        background_color: 0.93, 0.91, 0.87, 1
-                        foreground_color: 0.17, 0.17, 0.17, 1
-                        cursor_color: 0.55, 0.27, 0.07, 1
+                        background_color: 0.937, 0.925, 0.902, 1
+                        foreground_color: 0.133, 0.145, 0.165, 1
+                        cursor_color: 0.239, 0.420, 0.341, 1
                         padding: "12dp", "10dp"
 
                     # Topic chips (previously used topics)
@@ -1690,7 +1690,7 @@
                             size_hint_x: None
                             width: "44dp"
                             on_release: root.set_importance(1)
-                            color: (0.55,0.27,0.07,1) if root.importance >= 1 else (0.85,0.83,0.78,1)
+                            color: (0.239,0.420,0.341,1) if root.importance >= 1 else (0.85,0.83,0.78,1)
                             background_color: 0,0,0,0
                             background_normal: ""
                             background_down: ""
@@ -1700,7 +1700,7 @@
                             size_hint_x: None
                             width: "44dp"
                             on_release: root.set_importance(2)
-                            color: (0.55,0.27,0.07,1) if root.importance >= 2 else (0.85,0.83,0.78,1)
+                            color: (0.239,0.420,0.341,1) if root.importance >= 2 else (0.85,0.83,0.78,1)
                             background_color: 0,0,0,0
                             background_normal: ""
                             background_down: ""
@@ -1710,7 +1710,7 @@
                             size_hint_x: None
                             width: "44dp"
                             on_release: root.set_importance(3)
-                            color: (0.55,0.27,0.07,1) if root.importance >= 3 else (0.85,0.83,0.78,1)
+                            color: (0.239,0.420,0.341,1) if root.importance >= 3 else (0.85,0.83,0.78,1)
                             background_color: 0,0,0,0
                             background_normal: ""
                             background_down: ""
@@ -1723,13 +1723,13 @@
                         height: "44dp"
                         font_size: "14sp"
                         on_release: root.toggle_key_takeaway()
-                        color: (1,1,1,1) if root.is_key_takeaway else (0.55,0.27,0.07,1)
+                        color: (1,1,1,1) if root.is_key_takeaway else (0.239,0.420,0.341,1)
                         background_color: 0,0,0,0
                         background_normal: ""
                         background_down: ""
                         canvas.before:
                             Color:
-                                rgba: (0.55,0.27,0.07,1) if root.is_key_takeaway else (0.85,0.83,0.78,1)
+                                rgba: (0.239,0.420,0.341,1) if root.is_key_takeaway else (0.85,0.83,0.78,1)
                             RoundedRectangle:
                                 size: self.size
                                 pos: self.pos
@@ -1746,7 +1746,7 @@
             padding: "16dp", "10dp"
             canvas.before:
                 Color:
-                    rgba: 0.96, 0.94, 0.91, 1
+                    rgba: 0.976, 0.965, 0.941, 1
                 Rectangle:
                     size: self.size
                     pos: self.pos
@@ -1754,3 +1754,4 @@
                 text: "Save Entry"
                 disabled: not (bool(root.entry_text) and bool(root.entry_type))
                 on_release: root.save_entry()
+

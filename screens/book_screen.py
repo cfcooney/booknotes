@@ -340,7 +340,7 @@ class BookScreen(Screen):
         Popup(
             title="Export Notes",
             content=Label(
-                text="Coming soon", halign="center", color=(0.17, 0.17, 0.17, 1)
+                text="Coming soon", halign="center", color=(0.133, 0.145, 0.165, 1)
             ),
             size_hint=(0.6, None),
             height=dp(160),
