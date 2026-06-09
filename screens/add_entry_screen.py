@@ -45,6 +45,7 @@ class AddEntryScreen(Screen):
         self._load_topic_chips()
 
     def _reset_form(self) -> None:
+        self._cleanup_temp_files()
         self.entry_type = "note"
         self.entry_text = ""
         self.details_expanded = False
@@ -57,6 +58,18 @@ class AddEntryScreen(Screen):
         ids.text_input.text = ""
         ids.page_input.text = ""
         ids.topics_input.text = ""
+
+    def _cleanup_temp_files(self) -> None:
+        import os
+
+        for attr in ("_temp_norm_path", "_temp_crop_path"):
+            path = getattr(self, attr, None)
+            if path:
+                try:
+                    os.unlink(path)
+                except OSError:
+                    pass
+            setattr(self, attr, None)
 
     def _load_topic_chips(self) -> None:
         chip_row = self.ids.topic_chips
@@ -104,8 +117,29 @@ class AddEntryScreen(Screen):
     def _on_image_selected(self, path: str | None) -> None:
         if path is None:
             return
+        import tempfile
+
+        from services.image_crop import normalize_image
+
+        tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+        tmp.close()
+        self._temp_norm_path = tmp.name
+        normalize_image(path, tmp.name)
+
+        from screens.crop_popup import CropPopup
+
+        popup = CropPopup(image_path=tmp.name)
+        popup.on_crop_done = self._on_crop_done
+        popup.open()
+
+    def _on_crop_done(self, cropped_path: str | None) -> None:
+        if cropped_path is None:
+            return
+        self._temp_crop_path = cropped_path
         self.ocr_loading = True
-        threading.Thread(target=self._run_ocr, args=(path,), daemon=True).start()
+        threading.Thread(
+            target=self._run_ocr, args=(cropped_path,), daemon=True
+        ).start()
 
     def _run_ocr(self, path: str) -> None:
         from services.ocr import extract_text_from_image
@@ -136,6 +170,7 @@ class AddEntryScreen(Screen):
         ).open()
 
     def discard_image(self) -> None:
+        self._cleanup_temp_files()
         self.captured_image_path = ""
         self.ids.text_input.text = ""
 

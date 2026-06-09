@@ -1359,6 +1359,72 @@
         width: self.texture_size[0]
         height: "28dp"
 
+<CropOverlay>:
+    # Canvas drawn entirely in Python via redraw() — no KV canvas block needed
+
+<CropPopup>:
+    title: ""
+    separator_height: 0
+    size_hint: 1, 1
+    background: ""
+    background_color: 0, 0, 0, 0.92
+
+    BoxLayout:
+        orientation: "vertical"
+
+        # Instruction bar
+        BoxLayout:
+            size_hint_y: None
+            height: "44dp"
+            padding: "12dp", "6dp"
+            canvas.before:
+                Color:
+                    rgba: 0.239, 0.420, 0.341, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            Label:
+                text: "Drag to select the quote region"
+                font_size: "14sp"
+                color: 1, 1, 1, 1
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+
+        # Image area with crop overlay
+        RelativeLayout:
+            size_hint_y: 1
+            Image:
+                id: crop_image
+                source: root.image_path
+                fit_mode: "contain"
+                size_hint: 1, 1
+                allow_stretch: True
+            CropOverlay:
+                id: overlay
+                size_hint: 1, 1
+                pos: 0, 0
+
+        # Button bar
+        BoxLayout:
+            size_hint_y: None
+            height: "64dp"
+            padding: "16dp", "10dp"
+            spacing: "12dp"
+            canvas.before:
+                Color:
+                    rgba: 0.976, 0.965, 0.941, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            SecondaryButton:
+                text: "Retake / Cancel"
+                on_release: root._cancel()
+            PrimaryButton:
+                text: "Extract Text"
+                disabled: not root.has_selection
+                on_release: root._confirm_crop()
+
 <AddEntryScreen>:
     canvas.before:
         Color:
